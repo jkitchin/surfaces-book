@@ -1,0 +1,87 @@
+#+TITLE:     Syllabus for 06-714 Surfaces and Adsorption
+#+AUTHOR:    John Kitchin
+#+EMAIL:     jkitchin@andrew.cmu.edu
+#+DATE:      2013-01-14 Mon
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+
+The current version of this syllabus will always be at https://github.com/jkitchin/surfaces-book/syllabus
+
+* Instructors
+Professor John Kitchin
+DH A207F
+412-269-7803
+jkitchin@andrew.cmu.edu
+Office hours by appointment
+
+TA: Aaron Reinicker
+areinick@andrew.cmu.edu
+Office hours by appointment
+
+** Textbook
+We will not be using a textbook this semester. I will provide you with class notes and photocopies of reading materials. You can find the latest copies of notes at https://github.com/jkitchin/surfaces-book.
+
+** classes
+Classes held 11:30am to 1:20pm on Mondays and Wednesdays in SH214. See the end of the syllabus for notes about the class schedule. 
+
+** Course description
+
+This course will provide a survey of solid surfaces and gas-solid interactions. Topics include the structure and electronic properties of metal surfaces, the kinetics and thermodynamics of adsorption and desorption processes, and concepts in heterogeneous catalysis. The course emphasizes the application of recent experimental techniques in studying these problems. 
+
+Numerical analysis of data is increasingly important in science. In this course we will have a focus on numerical analysis of data typically obtained in surface science. The primary tool used for this analysis will be the Python programming language and several scientific, numeric and plotting libraries. We will go over this in class.
+
+** Course work
+
+Your course grade will be primarily determined by your performance on problem sets, in class quizzes, a literature review project, and a course project. 
+
+| category          | %wt |
+|-------------------+-----|
+| Problem sets      |  30 |
+| Quizzes           |  30 |
+| Literature review |  20 |
+| review            |  20 |
+|                   | 100 |
+#+TBLFM: @>$2=vsum(@2..@-1)
+
+** Course schedule
+*** [2013-01-14 Mon]
+*** [2013-01-16 Wed]
+*** [2013-01-21 Mon] MLK Day, NO CLASS
+*** [2013-01-23 Wed]
+*** [2013-01-28 Mon]
+*** [2013-01-30 Wed]
+*** [2013-02-04 Mon]
+*** [2013-02-06 Wed]
+*** [2013-02-11 Mon]
+*** [2013-02-13 Wed]
+*** [2013-02-18 Mon]
+*** [2013-02-20 Wed]
+*** [2013-02-25 Mon]
+*** [2013-02-27 Wed]
+*** [2013-03-04 Mon]
+*** [2013-03-06 Wed]
+*** [2013-03-11 Mon] SPRING BREAK, NO CLASS
+*** [2013-03-13 Wed] SPRING BREAK, NO CLASS
+*** [2013-03-18 Mon]
+*** [2013-03-20 Wed]
+*** [2013-03-25 Mon]
+*** [2013-03-27 Wed]
+*** [2013-04-01 Mon]
+*** [2013-04-03 Wed]
+*** [2013-04-08 Mon]
+*** [2013-04-10 Wed]
+*** [2013-04-15 Mon]
+*** [2013-04-17 Wed]
+*** [2013-04-22 Mon]
+*** [2013-04-24 Wed]
+*** [2013-04-29 Mon]
+*** [2013-05-01 Wed]
