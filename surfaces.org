@@ -1,0 +1,175 @@
+#+TITLE:     Surfaces and Adsorption
+#+AUTHOR:    John Kitchin and Andrew Gellman
+#+EMAIL:     johnrkitchin@gmail.com
+#+DATE:      2013-01-13 Sun
+#+DESCRIPTION:
+#+KEYWORDS: Surface science
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:nil pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+
+* About this book
+
+
+** Python
+The book uses Python wherever numerical analysis is required. Python is similar in nature to Matlab, but is freely available. We have attempted to introduce the language by example throughout the book. If you are a new user, you should start at the beginning of the book. If you are experienced with Matlab, the syntax should be easy to read. We recommend the following Python distribution for use with this book.
+
+- Enthought Python Distribution (http://www.enthought.com/products/epd.php)
+This package is free for academic use, and available for Windows, Macs and Linux. The package includes all the typical python libraries needed for numerical, scientific and graphics computing.
+
+* Introduction
+** The Importance of Solid Surfaces
+
+-	We have never seen anything but the surface of an object.
+
+-	Catalysis.  Over 90% of all commodity chemical are produced or processed through the use of heterogeneous catalysts.  These catalysts are: dispersed metal particles, high surface area zeolites, finely divided oxide powders.
+
+-	Corrosion.  Destructive oxidation of surfaces or etching for control of surface finishes.
+
+-	Brittle fracture.  Fracture of solids is often due to segregation of foreign materials to grain boundaries.
+
+-	Thermionic emission.  Electron emission from heated filaments in TVs (old), electronic tubes etc.  Rate of emission depends on surface properties.
+
+-	Crystal growth.  Growth from solution or from the vapor phase depends on reactions on surfaces and on diffusion on surfaces.
+
+-	Semiconductor properties and processing.  As the size of devices decreases the surface-to-volume ratio increases and surfaces begin to have an important influence on physical properties.
+
+-	Nanophase materials.  Solid materials with grains of nanometer dimensions have extremely high grain boundary densities and extraordinary properties.
+
+** Historical Development
+
+-	Solids were found to cause reactions.
+	Priestley (1775) CH_3CH_2OH decomposition on Cu.
+	Davy (1817) CO and H_2 oxidation on Pt. Miner’s lamp.
+
+-	Reactivity increased with porosity.  One idea was that the surfaces compress gasses in pores and cause reaction. This was debunked by the fact that porous metal surfaces differ in reactivity.
+
+-	Van’t Hoff and Sabatier show that surfaces affect the rate but not the equilibrium constant of a reaction.  This is a major milestone in the development of chemical thermodynamics.  Demonstrates that the equilibrium constant is path independent.
+
+-	Several catalytic processes are developed for commerce.
+ +	Messel (1875) 	SO_2 + ½ O_2 \rightarrow SO_3
+ +	Mond (1888)	CH_4 + ½ O_2 \rightarrow CO + 2 H_2
+ +	Sabatier (1902)	C_{2}H_{4} + H_2 \rightarrow C_{2}H_{6}
+ +	Haber (1905)	N_2 + 3 H_2 \rightarrow 2 NH_3
+
+-	Langmuir (1915) works on the development of long-life light bulbs for GE and studies the adsorption of gases on hot filaments.
+
+-	Davisson and Germer (1927) observe the diffraction of electron from the surface of a Ni crystal and demonstrate that this is due to the wave nature of the electron.  Quantum mechanics is proved!
+
+-	Modern surface science is born in the 1960’s as an outgrowth of space science and the development of instrumentation for achieving ultra-high vacuum (10^{-10} Torr) environments.
+
+** Modern Surface Science
+
+-	Atomistic level study of surface imposes extremely stringent demands on experimental methods.
+
+-	The total amount of material at the surface of a solid is extremely small.  10^{15} atoms per cm^2 or 10^{-9} moles.
+
+-	The surface must be analyzed in the presence of a bulk solid whose contribution to any measurement could swamp that of the surface.
+
+** Surface Sensitivity
+
+-	Surface sensitivity must be achieved in order to avoid studying the bulk of a solid rather than the surface of interest.
+
+-	Electrons and ions interact very strongly with matter and so they cannot penetrate or escape from the bulk of a solid.  In scattering or emission experiments they only sample the surface.
+
+#+caption: The XPS experiment with electrons coming from the surface only.  X-rays penetrate the surface but electrons photemitted from the bulk cannot escape.
+[[./images/xps-1.png]]
+*************** TODO consider redrawing in inkscape
+*************** END
+
+
+#+caption: The universal curve of electron mean free paths in solids.  The mean free path is the mean distance traveled before an electron is scattered by an atom.  This curve has been obtained from measurements made with many materials.
+[[./images/mean-free-path.png]]
+*************** TODO replace with my version, which i have to find
+*************** END
+
+-	Ions are even more surface sensitive than electrons.  Low energy ions (less than 100 eV) do not penetrate the bulk at all.
+
+-	Surface sensitive spectroscopies can almost always be classified into one of four types.
+	
+  +	ion (or $e^-$)  in  $\rightarrow$  ion (or $e^-$)  out
+  +	ion (or $e^-$)  in $\rightarrow$  photon  out
+  +	photon  in $\rightarrow$  ion (or $e^-$)  out
+  +	photon  in  $\rightarrow$  photon  out
+
+#+caption: Photon in \rightarrow photon out only detecting sulfur atoms on a surface.  If there were high concentrations of sulfur in the bulk then the bulk signal would swamp the signal from the surface atoms.
+[[./images/photon-in-photon-out.png]]
+
+** Surface Cleanliness
+
+-	During the course of an experiment (which may be many minutes to many hours) the state of the surface must remain stable (clean or otherwise).  This means that if one studies a clean surface it must not become contaminated by collisions with gas phase molecules.
+	
+-	Consider the flux of molecules colliding with a surface.
+
+$F = \frac{1}{4}N_g \langle \nu \rangle$
+
+Where $F$ is the flux (molecules/m^2/s), $N_g$ is the gas molecular density, (molecules/m^3), and $\langle \nu \rangle$ is the mean molecular speed of the gas (m/s).
+
+The mean molecular speed is given by kinetic theory:
+
+$\langle \nu \rangle = \sqrt{\frac{8 k T}{\pi m}}$
+
+Where $k$ is the Boltzman constant (1.38 \times 10^{-23} J/K), $T$ is the absolute temperature, and $m$ is the molar mass (kg).
+
+The ideal gas law gives the density.
+
+$N_g = \frac{n}{V} = \frac{P}{k T}$ 
+
+where $P$ is the pressure, $n$ is moles of gas in the volume.
+
+Putting this together we finally have the flux as
+
+$F = \frac{P}{\sqrt{2 \pi m k T}}$
+
+Let us consider an example at $P = 1$ bar, $T = 300$ K, and $m = 30$ amu. We will show how to do this in Python.[fn:1]
+
+#+BEGIN_SRC python -n -r -l "#(ref:%s)"
+import numpy as np
+
+P = 1.0              # bar
+T = 300.0            # K
+m = 30.0             # amu
+kb = 1.3807e-23      # J/K
+
+# conversion factors
+amu2kg = 1.660538921e-27
+bar2Pa = 100000.0
+m2cm = 100.0
+
+F = (P * bar2Pa) / (np.sqrt(2 * np.pi * m *amu2kg * kb * T))
+print 'The flux = {0:1.2e} mlc/cm^2/s'.format(F / m2cm**2)    #(ref:format)
+#+END_SRC
+
+#+RESULTS:
+: The flux = 2.78e+23 mlc/cm^2/s
+
+In line [[(format)]] we use the syntax {0:1.2e} to format the answer in scientific notation with two decimal places.
+
+Note the order of magnitude, about 0.5 moles of gas hit a square centimeter, every second. A typical density of surface atoms is \rho_s = 2.7 \times 10^{14} atoms/cm^2. The collision frequency is then given by:
+
+$Z_c = \frac{F}{\rho_s} \approx 10^9$
+
+That is, each surface atom is bombarded about 1 billion times a second! Let us assume that we could start with a clean surface, and that every molecule that hits the surface sticks. We can estimate adsorption rates from the flux then. 
+
+| Pressure (bar) | adsorption rate (molecules/sec) |
+|----------------+---------------------------------|
+| 1              | 10^9/sec                        |
+| 10{}^{-9}      | 1/sec                           |
+| 10{}^{-12}     | 1/hr                            |
+
+You can see that we must have pressures less than 1 \times 10^{-13} bar to keep surfaces clean for hours at a time to do experiments. Of course not every molecule that hits sticks, so this is only an approximate analysis.
+
+
+* Footnotes
+
+[fn:1] We have to import the numpy library. Here we import it with the name np, and then access the functions using a dot notation. For example, the sqrt function is np.sqrt.
+
+
+* References
+bibliography:surfaces.bib
