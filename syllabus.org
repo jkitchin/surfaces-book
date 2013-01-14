@@ -28,9 +28,9 @@ areinick@andrew.cmu.edu
 Office hours by appointment
 
 ** Textbook
-We will not be using a textbook this semester. I will provide you with class notes and photocopies of reading materials. You can find the latest copies of notes at https://github.com/jkitchin/surfaces-book.
+We will not be using a textbook this semester. I will provide you with class notes and photocopies of reading materials. You can find the latest copies of notes at https://github.com/jkitchin/surfaces-book. It is not necessary to use git to keep up with the notes, but you may find it helpful.
 
-** classes
+** Classes
 Classes held 11:30am to 1:20pm on Mondays and Wednesdays in SH214. See the end of the syllabus for notes about the class schedule. 
 
 ** Course description
