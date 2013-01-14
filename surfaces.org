@@ -67,8 +67,8 @@ This package is free for academic use, and available for Windows, Macs and Linux
 -	Van’t Hoff and Sabatier show that surfaces affect the rate but not the equilibrium constant of a reaction.  This is a major milestone in the development of chemical thermodynamics.  Demonstrates that the equilibrium constant is path independent.
 
 -	Several catalytic processes are developed for commerce.
- +	Messel (1875) 	SO_2 + \frac{1}{2} O_2 \rightarrow SO_3
- +	Mond (1888)	CH_4 + \frac{1}{2} O_2 \rightarrow CO + 2 H_2
+ +	Messel (1875) 	SO_2 + $\frac{1}{2}$ O_2 \rightarrow SO_3
+ +	Mond (1888)	CH_4 + $\frac{1}{2}$ O_2 \rightarrow CO + 2 H_2
  +	Sabatier (1902)	C_{2}H_{4} + H_2 \rightarrow C_{2}H_{6}
  +	Haber (1905)	N_2 + 3 H_2 \rightarrow 2 NH_3
 
@@ -174,8 +174,8 @@ That is, each surface atom is bombarded about 1 billion times a second! Let us a
 | Pressure (bar) | adsorption rate (molecules/sec) |
 |----------------+---------------------------------|
 | 1              | 10^9/sec                        |
-| 10{}^{-9}      | 1/sec                           |
-| 10{}^{-12}     | 1/hr                            |
+| 10${}^{-9}$    | 1/sec                           |
+| 10${}^{-12}$   | 1/hr                            |
 
 You can see that we must have pressures less than 1 \times 10^{-13} bar to keep surfaces clean for hours at a time to do experiments. Of course not every molecule that hits sticks, so this is only an approximate analysis.
 
