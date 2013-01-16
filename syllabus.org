@@ -52,8 +52,57 @@ Your course grade will be primarily determined by your performance on problem se
 |                   | 100 |
 #+TBLFM: @>$2=vsum(@2..@-1)
 
+** Grading
+You should be transitioning into a young professional at this point. That means assignments are done professionally too. In addition to the technical correctness of your work, we will also be assessing the professionalism with which it is presented.
+
+There will be a straight scale (no curve) so you will always know exactly what your grade is at all times. Each problem will be graded considering the approach used, the correctness of the answer, the neatness and quality of presentation, etc....  
+
+"A" work has the following characteristics: The correct approach is used and the problem is set up correctly. The work is not over-simplified and it is easy to see it is done correctly. Any assumptions made were stated and justified. The answers are correct or only the most trivial errors are present, and were identified by the student. All of the correct units were used. The presentation is clear, logical, neat and in order. Error analysis was performed if appropriate. Any figures used have properly labeled axes with units, and a legend if there is more than one curve. Essentially everything that should have been done was done and done correctly. This is the kind of work an employer wants their employees to do, and the kind of work you will be promoted for doing.  
+
+"B" work is deficient in one or more of the properties of "A" work. It might be basically right, but essential details are missing such as units, or the presentation is sloppy. You will get by with this kind of work, but you should not expect to be praised for it.  
+
+"C" quality work is deficient in more than two of the properties of "A" work. You would probably not get fired for this kind of work, but you may be notified you need to improve and you should not expect any kind of promotion.  
+
+"D" work is not considered acceptable performance. Repeat offenses could lead to the loss of your job.  
+
+"R" work is totally unacceptable performance. You will be fired. 
+
+Each problem will have a point value associated with it. The letter grade you get serves as a multiplier on that point value. The multipliers are:
+
+| Lettergrade | multiplier |
+|-------------+------------|
+| A++         |          1 |
+| A+          |       0.95 |
+| A           |        0.9 |
+| A-          |       0.85 |
+| A/B         |        0.8 |
+| B+          |       0.75 |
+| B           |        0.7 |
+| B-          |       0.65 |
+| B/C         |        0.6 |
+| C+          |       0.55 |
+| C           |        0.5 |
+| C-          |       0.45 |
+| C/D         |        0.4 |
+| D+          |       0.35 |
+| D           |        0.3 |
+| D-          |       0.25 |
+| D/R         |        0.2 |
+| R+          |       0.15 |
+| R           |        0.1 |
+| R-          |       0.05 |
+| R--         |        0.0 |
+
+At the end of the semester I will calculate what fraction of the possible points you have earned, and your grade will be based on this distribution: 
+
+| 80% <= grade      | A |
+| 60% <= grade < 80 | B |
+| 40% <= grade < 60 | C |
+| 20% <= grade < 40 | D |
+| grade < 20%       | R |
+
 ** Course schedule
-*** [2013-01-14 Mon]
+*** DONE [2013-01-14 Mon]
 *** [2013-01-16 Wed]
 *** [2013-01-21 Mon] MLK Day, NO CLASS
 *** [2013-01-23 Wed]
