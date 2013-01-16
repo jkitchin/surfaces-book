@@ -23,7 +23,7 @@
     Free Documentation License".
 
 * About this book
-This book intends to provide a freely available resource on concepts in surface science. You are free to copy this work, redistribute, even print and sell the work, provided you adhere to the terms in the [[license]].
+This book intends to provide a freely available resource on concepts in surface science. You are free to copy this work, redistribute, even print and sell the work, provided you adhere to the terms in the [[license]]. 
 
 The book is a work in progress and is being used to teach a course titled "Surfaces and adsorption".
 
@@ -179,15 +179,619 @@ That is, each surface atom is bombarded about 1 billion times a second! Let us a
 
 You can see that we must have pressures less than 1 \times 10^{-13} bar to keep surfaces clean for hours at a time to do experiments. Of course not every molecule that hits sticks, so this is only an approximate analysis.
 
+* Structure of Solid Surfaces
+
+In this section we review the structure of solid surfaces. Recommended readings include chapter 2 in citealp:masel96:_princ and chapter 2 in cite:somorjai10:_introd.
+
+-	The crystalline structure of solids has been observed since antiquity.
+
+-	The existence of crystals and the fact they could be subdivided into identical crystals lead to the original ideas that matter was formed of some elementary components with characteristic shape.
+
+-	Structure is defined by the positions of all atoms of all types in a solid.
+
+$$\left{\left(x_i^m, y_i^m, z_i^m \right) \right} i \in I, m-type$$ [fn:2]
+
+-	When a crystal is cleaved or sliced it exposes a surface with atoms in some ordered array.
+
+- 	Electron diffraction first proved the existence of atomic order at crystal surfaces (Davisson and Germer, 1927).
+
+-	The first direct observation of atoms was on surfaces and was made using Field Ion Microscopy (Muller and Bahadur, Oct. 11, 1955).
+
+#+caption: Field ion emission microscope.  The metal tips has a high applied potential (\approx 25 kV).  He atoms are ionized at the points of high field gradient (atoms at step edges and then accelerated away from the tip along the field lines.  They are imaged on a phosphorus screen.
+[[./images/fem-unknown-origin.jpg]]
+
+#+caption: Field ion micrograph of a tungsten tip.  The atomic structures of various planes are easily observable.
+[[./images/Field-ion-micrograph-unknown-origin.jpg]]
+
+- In general we consider three types of solids and the surfaces that
+  they expose:
+
+  + Amorphous – no long range structure or relationship between the
+    positions of atoms.
+
+  + Periodic – the structure is based on a unit cell that is repeated
+    in space through translation.
+
+  + Quasi-periodic – the structure has long range order in the sense
+    that there are rules that define the positions of all atoms based
+    on the positions of a few, but there is no ‘unit cell’ and no
+    translational repetition of the structure.
+- All the surfaces that we will discuss are based on periodic
+  structures and thus some discussion of symmetry is needed.
+
+** Symmetry
+-	Symmetry is one of the most powerful tools available for
+        understanding and describing the structure of molecules and
+        solids.
+
+-	Symmetry often dictates some of the important properties of
+        molecules, solids, and surfaces.
+
+-	The existence of dipole moments of molecules can be determined
+        immediately from symmetry arguments: CO_2, H_{2}O. Here is an example.
+
+[[./images/dipoles.png]]
+
+- Second harmonic generation of light occurs only in crystals with no
+  inversion symmetry.
+
+[[./images/no-inversion-symmetry-example.png]]
+
+We will see later that symmetry determines which vibrational modes are visible in a vibrational spectroscopy experiment.
+
+*** 	Point Symmetry
+
+-	Point group symmetry is used to describe isolated molecules.
+
+-	The symmetry elements that can exist in molecules are :
+	+ mirror planes,
+	+ rotational axes,
+	+ inversion symmetry, and
+	+ rotation-reflection axes.
+	  
+
+*** 	Symmetry in 1D
+
+-	In extended dimensional spaces symmetry is defined by translational periodicity combined with symmetry elements.
+
+-	The constraint of translational periodicity limits the types of symmetry elements that can be considered.
+
+-	There are two elements that are needed to define the structure of a periodic solid: a lattice and a basis.
+
+-	The lattice is a set of abstract points related to one another by translational periodicity which divide space into unit cells.
+
+[[./images/1d-lattice.png]]
+
+The positions of each of the points are the set {x_n}  related by 
+
+$$ x_n = x_0 + n \cdot a$$  $n \in I$	
+
+-	The basis is the set of atoms which are positioned at identical positions {b_i} within each of the unit cells.
+
+-	The positions of atoms in the unit cell are usually given in terms of the lattice vector lengths, b = 0 $\rightarrow$ 1.
+
+[[./images/atomic-basis.png]]
+
+The position of any atom in the solid can then be given as
+
+$$ x_{i,n} = x_0 + (n + b_i) \cdot a$$
+
+where $i$ is the atom #, and $n$ is the unit cell number.
+
+-	A symmetry element relates the position of two or more atoms (of the same type) within the unit cell to one another.
+
+-	Specifying the position of one atom and the existence of a symmetry element immediately implies the existence and dictates the position of one or more additional atoms.
+
+[[./images/mirror-plane.png]]
+
+-	The mirror plane supplies a rule for relating the positions of identical points in the lattice or objects of the basis.
+
+
+-	A mirror plane at position $x^m$ maps a point or atom at a position $x$ into an identical point or atom at position $x' = x^m+(^xm-x) = 2x^m-x$.
+
+
+Example : Consider the fact that we have atoms at positions  $x_{1,n}$
+
+$$x_{1,n} = x+0 + b^m \cdot a$$
+
+and a mirror plane at
+
+$ x^m = x_0 + b^m \cdot a$.
+
+
+This implies the presence of a set of identical atoms at positions  $x_{2,n}$.
+
+\begin{eqnarray}			 
+x_{1,n} &\implies& 2 x^m - x_{1,n} \\
+x_{2,n} &=& (2 x_0 + 2b^m \cdot a) - (x_0 + (n + b_1)) \cdot a) \\
+        &=& x_0 + (2 b^m - n - b_1) \cdot a
+\end{eqnarray}
+
+If the position of the mirror plane happened to be chosen such that b^m = $\frac{1}{2}$ then this would generate all the other atoms in the unit cell shown above.
+
+In other words this generates the positions of the entire set of atoms at positions b_2 within each of the unit cells.
+
+
+
+
+*** Symmetry in 2D
+
+- When one slices a plane through a 3D lattice it generates a surface
+  with the periodicity of a 2D lattice.
+
+- Note that the surface of a real solid is not really 2D.  It has some
+  depth since it consists of atoms that are not necessarily all
+  constrained to lie in the plane.  The periodicity that we think of
+  is actually due to the projection of the 3D semi-infinite solid onto
+  the hypothetical plane that defines the surface.
+
+- Also, realize that the act of cutting a 3D transitionally periodic
+  solid destroys the periodicity in the direction normal to the cut.
+  It leaves only translational periodicity in the two directions
+  parallel to the cutting surface.
+
+**** 2D Lattices
+
+-	Symmetry in 2D is defined by a lattice of points combined with several symmetry elements.
+
+-	The lattice in 2D is defined by two vectors which define the sides of the unit cells  .
+
+-	The need that the lattice span all space with translational periodicity constrains the lattice vectors to fall into one of five types known as Bravais lattices.
+
+[[./images/bravais-lattices.png]]
+
+- One thing to note is that the unit cell for the lattice that is
+  called centered rectangular doesn’t look rectangular.  However, the
+  unit cell can be redrawn in such a way that it is rectangular but
+  has a lattice point at the center and an angle of \gamma = 90$^\circ{}$.
+
+- This unit cell is no longer “primitive” because it has more than one
+  lattice point per unit cell.  It is important to distinguish between
+  primitive and non-primitive lattices.  In a non-primitive lattice
+  the points are truly equivalent and therefore there will be atoms
+  that are equivalent and thus indistinguishable.
+
+**** Symmetry Elements
+
+- In 2D there are three types of symmetry elements that are consistent
+  with the constraint of translational periodicity.
+
+ 1. 	Rotation Axes : 2-, 3-, 4-, 6-fold
+ 2. 	Mirror planes
+ 3. 	Glide planes (screw axes according to Masel)
+
+[[./images/2D-symmetry-examples.png]]
+
+-	Note that not all of these symmetry elements must be specified explicitly.
+
+-	Specifying two may imply the existence of others.
+
+-	The symmetry of the surface will be equal to or lower than that of the corresponding Bravais lattice.
+
+-	Combining the five Bravais lattices with the possible symmetry elements results in seventeen 2D space groups.  All 2D periodic structures fall into one of these groups.
+
+-	Consider just those that have the square Bravais lattice.
+
+[[./images/square-bravais-lattices.png]]
+
+-	Note that every one of the symmetry operations can be used to generate one point in the lattice from any other.
+
+
+Example: Consider a four-fold axis at the origin (0,0) and a point at (x,y).
+
+[[./images/4-fold-rotation.png]]
+
+These transformations can be written down as matrices.  The notation for the application of a rotation about fourfold axis by 90$^\circ{}$ is $\hat{C}_4^{(1)}$.
+
+[[./images/rotation-matrices.png]]
+
+Note also that there is a rigorous mathematical meaning to these matrix operations.  Two rotations by 90$^\circ{}$ about a fourfold axis would be represented by the following.
+
+[[./images/two-4fold-matrices.png]]
+
+This is the basis for a very powerful set of ideas that form the basis of "group theory".cite:carter98:_molec_symmet,bishop73:_group_chemis
+
+Before continuing, we briefly show how to verify the results above. In python we have three options to describe a matrix, and it is important to know the differences. 
+
+#+BEGIN_SRC python -n -k -r
+C41_list = [[0, -1], 
+            [1,  0]]  #(ref:list)
+
+C41_array = np.array([[0, -1], 
+                      [1,  0]])  #(ref:array)
+
+C41_matrix = np.matrix([[0, -1],     #(ref:matrix)
+                        [1,  0]])
+
+C41_matrix = np.matrix([[0, -1],[1,  0]]) #(ref:matrix-alt)
+#+END_SRC
+
+In line [[(list)]] above, we created a list of lists; that is, there are two lists inside a list. This is not a matrix, and does not act like a matrix. 
+
+In line [[(array)]] we created a numpy.array. This is closer to a matrix, but most mathematical operations act element-wise.
+
+In line [[(matrix)]] we create a numpy.matrix object. This acts like a matrix for mathematical operations.
+
+In each of the three examples discussed above, the second row of the data was aligned with spaces so you could "see" the intended arrangement of numbers. Since the second row is "inside" a pair of brackets or parentheses, this indentation is meaningless. It is perfectly fine to define the matrix as in line [[(matrix-alt)]], it is just a little harder to read.
+
+Now we consider verifying that two four-fold rotations are equivalent to a two fold rotation. 
+
+#+BEGIN_SRC python -n -k -r
+import numpy as np
+
+C21 = np.matrix([[-1, 0], [0, -1]])
+
+C41 = np.matrix([[0, -1],     #(ref:matrix)
+                 [1,  0]])
+
+print(C41 * C41)               #(ref:dot)
+
+print C41 * C41 == C21         #(ref:equal)
+print np.all(C41 * C41 == C21) #(ref:all)
+#+END_SRC
+
+#+RESULTS:
+: [[-1  0]
+:  [ 0 -1]]
+: [[ True  True]
+:  [ True  True]]
+: True
+
+In line [[(array)]] we define a matrix. This is similar to a matrix in Matlab, except that you have to use a matrix function to create it. The rows are aligned for visual clarity. Because the rows are inside the function parentheses, the indentation of the second row is unimportant. In line [[(dot)]] we multiply the matrix with itself. This works on a matrix, but not on a list or array. 
+
+You can visually see that the product of the two 4-fold matrices is equal to a 2-fold rotation matrix. In line [[(equal)]] we compare the two quantities. Note the comparison is element-wise, and we get a new matrix of Boolean values. That is inconvenient to examine, we want a single value saying whether the matrices are equal or not. In line [[(all)]] we use the numpy.all command to tell us whether all of the elements in the matrix are True or not.
+
+*** Symmetry in 3D
+
+-	Real surfaces are formed by slicing planes through 3D object.
+
+-	If the 3D solid has some periodicity or is crystalline then the surface that is produced by the cut will also have periodicity and symmetry.
+
+-	In 3D there are 14 possible Bravais lattices that will fill space with translational periodicity.
+
+-	The symmetry operations that can exist in 3D are :
+  +	mirror planes
+  +	rotations
+  +	inversion
+  +	rotation translation (screw axes)
+
+- Combination of the Bravais lattices with these symmetry elements
+gives /230/ possible 3D space groups.
+
+- The only metal with the simple cubic structure is Polonium.
+
+[[./images/cubic-lattice.png]]
+
+- Most metals have bulk structures that fall into the classes: face
+centered cubic, body centered cubic or hexagonal close packed.
+
+- Both fcc and hcp are close packed structures of spheres.
+
+[[./images/bcc-lattice.png]]
+
+[[./images/fcc-lattice.png]]
+
+[[./images/hcp-lattice.png]]
+
+- 	Note that the two atoms in the hcp lattice are not identical.
+        They are positioned above triangles of different orientation.
+        As a result the hcp lattice has two atoms per unit cell but is
+        still primitive.
+
+** Surfaces of the Simple Cubic Lattice
+
+-	Start by considering these just to get the idea of taking
+        slices of three dimensional structures. Depending on how you cut the surface, you can get square, rectangular, or even hexagonal arrangements of atoms at the surface.
+
+[[./images/square-lattice-surface.png]]
+
+[[./images/rectangular-lattice.png]]
+
+[[./images/hexagonal-lattice.png]]
+
+** 	Miller Indices
+
+-	There are an infinite number of planes that can be cut through
+        a 3D lattice. We need a way to name the planes.
+
+- For every vector direction that one defines in the lattice there is
+  a set of planes perpendicular to that vector.
+
+-	In a lattice that has some symmetry to it there will be
+        equivalent directions that expose identical faces.
+
+#+caption: The arrows indicate symmetrically equivalent surfaces.
+[[./images/equivalent-faces.png]]
+
+-	For atomic lattices or even molecular lattices one does not usually think of cutting "through" atoms or molecules. Cuts pass between atoms and expose those whose centers lie to one side of the cutting plane.
+
+[[./images/2-4a.png]]
+
+-	If one considers just the lattice then it doesn’t matter at what position along a given direction that the cut is made.  However, if one considered the contents of the unit cell then it does matter. 
+
+[[./images/2-4b.png]]
+
+*** Miller Index Formulation
+
+-	For a plane cut through a lattice:
+ 1.	Find the intersections (b_x, b_y, b_z) with b_i > 1 along each of
+        the three lattice vectors (in units of the vector length).
+ 2.	Find the lowest common denominator of the three lengths.
+
+$n = lcd\left{\frac{1}{b_x}, \frac{1}{b_y}, \frac{1}{b_z} \right}$
+
+ 3. 	Define the Miller indices of the plane as:
+
+ $(h,k,l) = \left( \frac{n}{b_x}, \frac{n}{b_y}, \frac{n}{b_z} \right )$.
+
+ 4. If $b_x = \infty$ then $h = 0$
+
+[[./images/2-5.png]]
+
+That example is pretty easy to work out in your head. Here is how to compute the lowest common denominator in Python.  Note that the lowest common denominator is the same as the lowest common multiple of the numbers in the divisor, and is related to the greatest common divisor.  [fn:3] Also, the lowest common denominator of three numbers is the same as the lowest common denominator of one number with the lowest common denominator of the other two numbers.
+#+BEGIN_SRC python -n -r -l "#(ref:%s)"
+from fractions import gcd                           #(ref:gcd)
+
+def LCM(a, b):                                      #(ref:def)
+    'returns the least common multiple of a and b'  #(ref:doc)
+    return a * b / gcd(a, b)
+
+print(LCM(1, LCM(1, 2)))                            #(ref:print)
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+In line [[(gcd)]] we import the =gcd= function from the fractions module. Line [[(def)]] illustrates a new python concept: the definition of a function. The function is called =LCM= and it takes two arguments. Line [[(doc)]] is simply a documentation string that tells us what the function does.  Note that the body of the function /must/ be indented! This is a critical difference between python and Matlab. The standard indentation is 4 spaces. Finally, in line [[(print)]], we use the functional form of the print command to output the result.  
+
+
+-	Note that for the hexagonal lattice it is quite common to use
+        four indices $(h,k,l,m)$ as though there were four vectors
+        needed to define the unit cell. This is illustrated below.
+
+[[./images/2-6.png]]
+
+-	In this case the four indices are not unique and the
+        relationship between them is that
+
+				$h + k = -l$.
+
+** Common Low Miller Index Surface Structures 
+
+-	The most common and important crystal structures for metals are the fcc, bcc, and hcp.
+
+-	The most common and important structures for the semiconductors are the diamond and zincblende structures.
+
+-	Of these, the most important surfaces are usually the low Miller index surfaces.  These tend to be closely packed arrays that are thermodynamically stable.
+
+-	Metal crystallites in catalysts usually expose low Miller index surfaces.
+
+*** The most common fcc surfaces
+#+caption: fcc(111)
+[[./images/fcc-111.png]]
+
+#+caption: fcc(100)
+[[./images/fcc-100.png]]
+
+#+caption: fcc(110)
+[[./images/fcc-110.png]]
+
+*** The most common bcc surfaces
+#+caption: bcc(110)
+[[./images/bcc-110.png]]
+
+#+caption: bcc(100)
+[[./images/bcc100.png]]
+
+#+caption: bcc(111)
+[[./images/bcc-111.png]]
+
+*** hcp surfaces
+
+#+caption: hcp(001)
+[[./images/hcp-001.png]]
+
+#+caption: hcp(100)
+[[./images/hcp-100.png]]
+
+** 	High Miller Index Surfaces
+
+-	Surfaces cut along planes that are not low Miller index planes can have very complex structures and are certainly not close packed.
+
+-	The structures that are exposed by high Miller index cuts are :
+ +	monoatomic steps, and
+ +	kinked steps.
+
+[[./images/fcc-511.png]]
+
+[[./images/fcc-643.png]]
+
+- 	All possible structure can be viewed on the web at the site:
+
+http://surfexp.fhi-berlin.mpg.de/
+
+-	It is important to realize that the steps have certain structure to them also and that they can be thought of as planes that project up through the surface.
+
+-	The fcc(511) surface can be thought of as (111) steps combined with the (100) terraces.
+
+-	When thinking about the step structure it is important to remember the atoms within the original unit cell.
+
+** 	Surface Relaxation
+
+-	Cleavage of a 3D solid removes one degree of translational periodicity.  The semi-infinite solid is now only periodic in the plane parallel to the cut.
+
+-	Clearly this must have some effect on the positions of atoms at the surface.  They are now only bonded to atoms on one side and must react to minimize total energy.
+
+-	The universally observed effect is that there is a contraction of the layers at the surface.
+
+-	The contraction is due to the contraction of electron density into the bulk of the solid.
+
+[[./images/2-7.png]]
+
+-	For the close packed surfaces the contraction is minimal; 1-3% of the plane spacing.
+
+-	For non-close packed low Miller index surfaces the contraction can be 5-10% of the plane spacing.
+
+-	For rough surfaces the contraction is greater as a percentage of the surface plane spacing because the surface plane spacing is lower.  The absolute contraction is not necessarily much different from that of a low Miller index surface.
+
+-	Relaxation preserves the 2D translational periodicity of the bulk.
+
+**  	Reconstruction
+
+-	The need to minimize the total energy of the surface can drive the surface to much more drastic rearrangements than relaxation.
+
+-	Reconstruction involves an atomic rearrangement that changes the 2D translational periodicity of the surface.
+
+[[./images/reconstructions-1.png]]
+
+[[./images/reconstructions-2.png]]
+
+-	The tendency is that the close packed or low Miller index surfaces of metals are thermodynamically stable.
+
+-	A number of the reconstructions that have been observed can be rationalize in terms of a surface taking on close packed structures.  The Au(110)-(2 \times 1) forms facets of (111) surfaces.
+
+-	One of the types of reconstruction that should be obvious is the coalescence of steps.  Steps are high energy features but are prevented from coalescence by dipole repulsion.
+
+-	At high enough step density, however, these become unstable and do coalesce into polyatomic steps.
+
+
+* Low Energy Electron Diffraction (LEED)
+
+-	As mentioned the structures of surface are not just what they would appear to be from cleaving of the bulk crystal.  Reconstructions can occur that change the periodicity of the surface lattice.  Relaxations cause changes in the layer spacings at solid surfaces.  Furthermore, adsorbed atoms and molecules can create new surface lattices, induce reconstructions or even remove the reconstructions of the clean surfaces.
+
+-	There are several types of structural experiments that have been developed.  The most common are Low Energy Electron Diffraction (LEED) and Scanning Tunneling Microscopy (STM).
+  
+-	LEED is the primary way in which the structures of surfaces and the adsorbed layers have been determined quantitatively and is quite commonly done by most research groups in the field of surface science.
+
+-	LEED can be used in one of two modes :
+ +	determination of unit cells of surfaces and adsorbed overlayers, and
+ +	true quantitative structure determination.
+
+-	The quantitative determination of structure is very difficult and highly computationally intensive.
+
+[[./images/leed-optics.png]]
+
+#+caption: Potential energy profile seen by the electron beam.
+[[./images/pe-leed-profile.png]]
+
+-	The phosphorus screen allows easy and cheap visualization of the LEED pattern.  Usually a photograph is taken of the back side of the screen.  This projects the diffraction pattern onto a plane.
+
+-	More complex methods of detection allow measurement of the diffraction spot profiles and the intensities.
+
+
+** Diffraction
+
+-	Diffraction requires wavelike behavior of the electron.  This was postulated by de Broglie.
+
+$$\lambda = \frac{h}{p} = \sqrt{\frac{150}{E_{kin}}} $$
+
+This gives the wavelength in \AA for kinetic energy in eV.
+
+-	Let us review the  rules of diffraction from a lattice in 1-D.  Basically diffraction is a process in which a wave is incident on an array of atoms.  To first order the waves scattered by each atom are spherical waves propagating with the same wavelength as the incident wave.  At long distances from the array the scattered waves can be considered to be planes waves from each source atom.
+
+[[./images/3-3-diffraction.png]]
+
+•	Diffraction occurs when the distances traveled by the scattered plane waves all differ by some integral multiple of the wavelength. A wave with wavelength \lambda is incident on a 1D lattice with spacing $a$ at an angle \phi_0.  
+
+[[./images/3-4-diffraction-angles.png]]
+
+•	In order to have constructive interference and obtain a diffracted beam the waves scattering off adjacent lattice points must travel distances which differ by integral multiples of the wavelength.
+
+•	The diffraction condition must be that
+
+$$a(\sin \phi_h - \sin \phi_0) = h \lambda$$
+
+for $h \in I$. For a given incident angle \phi_0 this determines the angles \phi_h at which diffracted beams appear.
+
+•	Another way of writing this equation is to think of the lattice spacing as a vector $\overrightarrow{a}$  and the incident and scattered waves as traveling along directions given by the unit vectors \hat{s}_0  and \hat{s}_h.
+
+[[./images/3-5-vector-diffraction.png]]
+
+•	Then the diffraction condition can be written as
+$$\overrightarrow{a}\cdot (\hat{s}_h - \hat{s}_0) = h \lambda$$
+
+Consider the 2D diffraction problem from a lattice with vectors $\overright arrow{a}_1$  and $\overrightarrow{a}_2$.  The beam is incident along a vector \hat{s}_0  and diffracting in a direction \hat{s}_{hk}.
+
+[[./images/3-6-2d-diffraction.png]]
+
+•	Now the diffraction conditions are given by
+
+		$$\overrightarrow{a}_1 \cdot (\hat {s}_{hk} - \hat{s}_0) = h \lambda$$		 
+
+		and
+ 		$$\overrightarrow{a}_2 \cdot (\hat {s}_{hk} - \hat{s}_0) = k \lambda$$.
+
+Both must be satisfied in order to get diffraction
+
+** The reciprocal lattice
+For any lattice vectors, $(\overrightarrow{a}_1, \overrightarrow{a}_2)$, we can define a new set of vectors, which we call the reciprocal lattice $(\overrightarrow{a}_1^*, \overrightarrow{a}_2^*)$ based on these definitions:
+
+[[./images/3-7-reciprocal.png]]
+
+•	Note that the reciprocal lattice is periodic and has symmetry just like the real space lattice.
+
+•	The power of this construction is that it provides us with the solutions to the diffraction problem.  The directions in which diffraction occurs are given by
+
+$$\hat{s} - \hat{s}_0 = h \lambda \overrightarrow{a}_1^* - k \lambda \overrightarrow{a}_2^*$$.
+
+Let us consider a general approach to computing the reciprocal lattice. First, we consider how to represent the vectors in the form of a matrix. For the two lattice vectors $\overrightarrow{a}_1$ and $\overrightarrow{a}_2$, we express them in a matrix as: $A = [\overrightarrow{a}_1 \overrightarrow{a}_2]$. We next consider the reciprocal lattice vectors, $A^* = \left[ \begin{array}{c}  \overrightarrow{a}_1^* \\ \overrightarrow{a}_2^* \end{array}\right].$ Now, we have the following equation: $A \cdot A^* = I$, where $I$ is the identity matrix. We can readily solve for the reciprocal lattice vectors as $A^* = I \cdot A^{-1} = A^{-1}$.
+
+Let us consider a specific example where $a_1 = 1x + 0y$ and $a_2 = 0x + 2y$.
+
+#+BEGIN_SRC python -n -r -k 
+import numpy as np
+
+a1 = [1, 0]               #(ref:a1)
+a2 = [0, 2]
+
+A = np.vstack([a1, a2])   #(ref:vstack)
+print('A = \n{0}'.format(A))
+
+Astar = np.linalg.inv(A)    #(ref:inv)
+
+a1star= Astar[0]            #(ref:a1*)
+a2star = Astar[1]
+print 'a1* = {0}'.format(a1star)
+print 'a1* = {0}'.format(a2star)
+
+# Verify the requirements.
+print np.dot(a1, a1star)    #(ref:dot)
+print np.dot(a1, a2star)
+print np.dot(a2, a1star)
+print np.dot(a2, a2star)
+#+END_SRC
+
+#+RESULTS:
+: A = 
+: [[1 0]
+:  [0 2]]
+: a1* = [ 1.  0.]
+: a1* = [ 0.   0.5]
+: 1.0
+: 0.0
+: 0.0
+: 1.0
+
+This method works generally for 2 and 3 dimensional lattices. Some notes about the code above:
+1. In line [[(a1)]] we represent the components of the vector as a /list/.
+2. In line [[(vstack)]] we create an array by using numpy.vstack. This makes the columns of the array the components of the vector. An array is not the same as a matrix!
+3. In line[[ (inv)]] we calculate the inverse of the array. Note that now the components of the reciprocal lattice vectors are in the /rows/ of the resulting array.
+4. In line [[(a1*)]] we use indexing to extract the first row. In Python, indexing starts at 0.
+5. In line [[(dot)]] we must use the numpy.dot function to get the matrix multiplication, or dot product of the two vectors. The * operator will perform element-wise multiplication.
 
 * Footnotes
 
 [fn:1] We have to import the numpy library. Here we import it with the name np, and then access the functions using a dot notation. For example, the sqrt function is np.sqrt.
 
+[fn:2] Read this equation as the (x,y,z) coordinates of the i^{th} atom of type m for every atom $i$ in the structure $I$.
+
+[fn:3] http://en.wikipedia.org/wiki/Least_common_multiple#Computing_the_least_common_multiple
+
+
 
 * References
 bibliography:surfaces.bib
-
+\bibliography{surfaces.bib}
 * GNU Free Documentation License
 # <<license>>
 #+begin_example
