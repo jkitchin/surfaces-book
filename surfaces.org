@@ -13,6 +13,8 @@
 #+LINK_UP:   
 #+LINK_HOME: 
 #+XSLT:
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{amsmath}
 
     Copyright \copyright 2013--\the\year\ John Kitchin, Andrew Gellman\par
     Permission is granted to copy, distribute and/or modify this document
@@ -173,7 +175,7 @@ That is, each surface atom is bombarded about 1 billion times a second! Let us a
 
 | Pressure (bar) | adsorption rate (molecules/sec) |
 |----------------+---------------------------------|
-| 1              | 10^9/sec                        |
+| 1              | 10$^{-9}$ /sec                  |
 | 10${}^{-9}$    | 1/sec                           |
 | 10${}^{-12}$   | 1/hr                            |
 
@@ -189,7 +191,7 @@ In this section we review the structure of solid surfaces. Recommended readings 
 
 -	Structure is defined by the positions of all atoms of all types in a solid.
 
-$$\left{\left(x_i^m, y_i^m, z_i^m \right) \right} i \in I, m-type$$ [fn:2]
+$$\left\{ \left( x_i^m, y_i^m, z_i^m \right) \right\} i \in I, m-type$$ [fn:2]
 
 -	When a crystal is cleaved or sliced it exposes a surface with atoms in some ordered array.
 
@@ -216,6 +218,7 @@ $$\left{\left(x_i^m, y_i^m, z_i^m \right) \right} i \in I, m-type$$ [fn:2]
     that there are rules that define the positions of all atoms based
     on the positions of a few, but there is no ‘unit cell’ and no
     translational repetition of the structure.
+
 - All the surfaces that we will discuss are based on periodic
   structures and thus some discussion of symmetry is needed.
 
@@ -311,9 +314,6 @@ If the position of the mirror plane happened to be chosen such that b^m = $\frac
 
 In other words this generates the positions of the entire set of atoms at positions b_2 within each of the unit cells.
 
-
-
-
 *** Symmetry in 2D
 
 - When one slices a plane through a 3D lattice it generates a surface
@@ -368,7 +368,7 @@ In other words this generates the positions of the entire set of atoms at positi
 
 -	The symmetry of the surface will be equal to or lower than that of the corresponding Bravais lattice.
 
--	Combining the five Bravais lattices with the possible symmetry elements results in seventeen 2D space groups.  All 2D periodic structures fall into one of these groups.
+-	Combining the five Bravais lattices with the possible symmetry elements results in seventeen 2D plane groups.  All 2D periodic structures fall into one of these groups.
 
 -	Consider just those that have the square Bravais lattice.
 
@@ -394,6 +394,8 @@ This is the basis for a very powerful set of ideas that form the basis of "group
 Before continuing, we briefly show how to verify the results above. In python we have three options to describe a matrix, and it is important to know the differences. 
 
 #+BEGIN_SRC python -n -k -r
+import numpy as np
+
 C41_list = [[0, -1], 
             [1,  0]]  #(ref:list)
 
@@ -440,6 +442,29 @@ print np.all(C41 * C41 == C21) #(ref:all)
 In line [[(array)]] we define a matrix. This is similar to a matrix in Matlab, except that you have to use a matrix function to create it. The rows are aligned for visual clarity. Because the rows are inside the function parentheses, the indentation of the second row is unimportant. In line [[(dot)]] we multiply the matrix with itself. This works on a matrix, but not on a list or array. 
 
 You can visually see that the product of the two 4-fold matrices is equal to a 2-fold rotation matrix. In line [[(equal)]] we compare the two quantities. Note the comparison is element-wise, and we get a new matrix of Boolean values. That is inconvenient to examine, we want a single value saying whether the matrices are equal or not. In line [[(all)]] we use the numpy.all command to tell us whether all of the elements in the matrix are True or not.
+
+
+#+BEGIN_SRC python -n -k -r
+import numpy as np
+
+C21 = np.array([[-1, 0], [0, -1]])
+
+C41 = np.array([[0, -1],     #(ref:matrix)
+                 [1,  0]])
+
+print(np.dot(C41, C41))               #(ref:dot)
+
+print np.dot(C41, C41) == C21         #(ref:equal)
+print np.all(np.dot(C41, C41) == C21) #(ref:all)
+#+END_SRC
+
+#+RESULTS:
+: [[-1  0]
+:  [ 0 -1]]
+: [[ True  True]
+:  [ True  True]]
+: True
+
 
 *** Symmetry in 3D
 
@@ -489,7 +514,7 @@ centered cubic, body centered cubic or hexagonal close packed.
 
 [[./images/hexagonal-lattice.png]]
 
-** 	Miller Indices
+** Miller Indices
 
 -	There are an infinite number of planes that can be cut through
         a 3D lattice. We need a way to name the planes.
@@ -518,7 +543,7 @@ centered cubic, body centered cubic or hexagonal close packed.
         the three lattice vectors (in units of the vector length).
  2.	Find the lowest common denominator of the three lengths.
 
-$n = lcd\left{\frac{1}{b_x}, \frac{1}{b_y}, \frac{1}{b_z} \right}$
+$n = lcd\left \{\frac{1}{b_x}, \frac{1}{b_y}, \frac{1}{b_z} \right \}$
 
  3. 	Define the Miller indices of the plane as:
 
@@ -541,6 +566,8 @@ print(LCM(1, LCM(1, 2)))                            #(ref:print)
 
 #+RESULTS:
 : 2
+
+
 
 In line [[(gcd)]] we import the =gcd= function from the fractions module. Line [[(def)]] illustrates a new python concept: the definition of a function. The function is called =LCM= and it takes two arguments. Line [[(doc)]] is simply a documentation string that tells us what the function does.  Note that the body of the function /must/ be indented! This is a critical difference between python and Matlab. The standard indentation is 4 spaces. Finally, in line [[(print)]], we use the functional form of the print command to output the result.  
 
@@ -701,16 +728,16 @@ This gives the wavelength in \AA for kinetic energy in eV.
 
 $$a(\sin \phi_h - \sin \phi_0) = h \lambda$$
 
-for $h \in I$. For a given incident angle \phi_0 this determines the angles \phi_h at which diffracted beams appear.
+for $h \in I$. For a given incident angle $\varphi_0$ this determines the angles $\varphi_h$ at which diffracted beams appear.
 
-•	Another way of writing this equation is to think of the lattice spacing as a vector $\overrightarrow{a}$  and the incident and scattered waves as traveling along directions given by the unit vectors \hat{s}_0  and \hat{s}_h.
+•	Another way of writing this equation is to think of the lattice spacing as a vector $\overrightarrow{a}$  and the incident and scattered waves as traveling along directions given by the unit vectors $\hat{s}_0$  and $\hat{s}_h$.
 
 [[./images/3-5-vector-diffraction.png]]
 
 •	Then the diffraction condition can be written as
 $$\overrightarrow{a}\cdot (\hat{s}_h - \hat{s}_0) = h \lambda$$
 
-Consider the 2D diffraction problem from a lattice with vectors $\overright arrow{a}_1$  and $\overrightarrow{a}_2$.  The beam is incident along a vector \hat{s}_0  and diffracting in a direction \hat{s}_{hk}.
+Consider the 2D diffraction problem from a lattice with vectors $\overrightarrow{a}_1$  and $\overrightarrow{a}_2$.  The beam is incident along a vector $\hat{s}_0$  and diffracting in a direction $\hat{s}_{hk}$.
 
 [[./images/3-6-2d-diffraction.png]]
 
@@ -734,7 +761,7 @@ For any lattice vectors, $(\overrightarrow{a}_1, \overrightarrow{a}_2)$, we can 
 
 $$\hat{s} - \hat{s}_0 = h \lambda \overrightarrow{a}_1^* - k \lambda \overrightarrow{a}_2^*$$.
 
-Let us consider a general approach to computing the reciprocal lattice. First, we consider how to represent the vectors in the form of a matrix. For the two lattice vectors $\overrightarrow{a}_1$ and $\overrightarrow{a}_2$, we express them in a matrix as: $A = [\overrightarrow{a}_1 \overrightarrow{a}_2]$. We next consider the reciprocal lattice vectors, $A^* = \left[ \begin{array}{c}  \overrightarrow{a}_1^* \\ \overrightarrow{a}_2^* \end{array}\right].$ Now, we have the following equation: $A \cdot A^* = I$, where $I$ is the identity matrix. We can readily solve for the reciprocal lattice vectors as $A^* = I \cdot A^{-1} = A^{-1}$.
+Let us consider a general approach to computing the reciprocal lattice. First, we consider how to represent the vectors in the form of a matrix. For the two lattice vectors $\overrightarrow{a}_1$ and $\overrightarrow{a}_2$, we express them in a matrix as: $A = [\overrightarrow{a}_1 \overrightarrow{a}_2]$. We next consider the reciprocal lattice vectors, $A^* = \left[ \begin{array}{c}  \overrightarrow{a}_1^* \\ \overrightarrow{a}_2^* \end{array}\right]$ Now, we have the following equation: $A \cdot A^* = I$, where $I$ is the identity matrix. We can readily solve for the reciprocal lattice vectors as $A^* = I \cdot A^{-1} = A^{-1}$.
 
 Let us consider a specific example where $a_1 = 1x + 0y$ and $a_2 = 0x + 2y$.
 
@@ -790,8 +817,8 @@ This method works generally for 2 and 3 dimensional lattices. Some notes about t
 
 
 * References
+bibliographystyle:unsrtnat
 bibliography:surfaces.bib
-\bibliography{surfaces.bib}
 * GNU Free Documentation License
 # <<license>>
 #+begin_example
