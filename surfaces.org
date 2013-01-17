@@ -29,6 +29,8 @@ This book intends to provide a freely available resource on concepts in surface 
 
 The book is a work in progress and is being used to teach a course titled "Surfaces and adsorption".
 
+We have endeavored to avoid any violations of copyright law in the creation of this book, and we believe that all material used in this book falls under "fair use" as allowed by copyright law. If you are a copyright holder of material used in this book and you believe we have infringed upon your rights, please contact John Kitchin at jkitchin@andrew.cmu.edu to discuss the issue. It is not our intention to violate the law.
+
 ** Python
 The book uses Python wherever numerical analysis is required. Python is similar in nature to Matlab, but is freely available. We have attempted to introduce the language by examples throughout the book. If you are a new user, you should start at the beginning of the book. If you are experienced with Matlab, the syntax should be easy to read. We recommend the following Python distribution for use with this book.
 
@@ -805,6 +807,215 @@ This method works generally for 2 and 3 dimensional lattices. Some notes about t
 3. In line[[ (inv)]] we calculate the inverse of the array. Note that now the components of the reciprocal lattice vectors are in the /rows/ of the resulting array.
 4. In line [[(a1*)]] we use indexing to extract the first row. In Python, indexing starts at 0.
 5. In line [[(dot)]] we must use the numpy.dot function to get the matrix multiplication, or dot product of the two vectors. The * operator will perform element-wise multiplication.
+
+
+
+** The LEED Pattern
+
+•	It will turn out that the LEED pattern is actually an image of the reciprocal lattice.
+
+•	Interpretation of the LEED pattern requires transforming the image of the reciprocal lattice back into the real lattice.
+
+*** Ewald Sphere
+
+•	At the crystal surface there is a lattice of real atoms and a reciprocal lattice.
+
+•	Define an origin for the reciprocal lattice and then imagine a set of rods drawn perpendicular to the surface through the reciprocal lattice points. 
+
+•	Finally, draw a sphere of radius $r=\frac{1}{\lambda}   over the lattice centered at a point $\frac{-\hat{s}_0}{\lambda}$  from the origin of the reciprocal lattice.
+
+[[./images/3-8-ewald.png]]
+
+•	The directions in which one gets diffraction beams  are given by the intersections of the reciprocal lattice rods with the sphere.
+
+\begin{eqnarray}
+\frac{1}{\lambda}\sin \varphi_h = \frac{1}{lambda}\varphi_0 + \frac{h}{a}\\
+a \cdot (\sin \varphi_h - \sin \varphi_0) = h \lambda
+\end{eqnarray}
+
+•	If you imagine a much larger sphere (the LEED) screen, then the diffracted beams are intersecting the screen and the image that one obtains is the projection of the screen onto a plane.  The screen is a magnified version of the Ewald sphere and the image is then a magnified view of the reciprocal lattice.
+
+•	As the crystal is rotated the image on the screen will rotate also.
+
+•	As the energy of the beam increases, $\frac{1}{\lambda}   increases and the number of beams intersecting the screen increases.  What one sees is that the reflected beam stays put but the diffracted beams converge onto the reflected beam.
+
+•	From the image one can determine the real space lattice but nothing more.  True structural information comes from the beam intensities.
+
+*** LEED Patterns from Simple Clean Surfaces
+
+•	LEED patterns are simply images of the reciprocal lattice of the real space surface lattice.
+
+•	Given the rectangular lattice below, what does the LEED pattern look like?
+
+[[./images/2d-leed-lattice.png]]
+
+The lengths of the real space lattice vectors are:
+
+	$|\overrightarrow{a}_1|=1$ and $|\overrightarrow{a}_2|=2$	 
+
+Let us use python to compute the reciprocal lattice vectors.
+
+#+BEGIN_SRC python
+import numpy as np
+
+A = np.matrix([[1, 0],
+               [0, 2]]) 
+
+Astar = A.T.I            #(ref:ati)
+print Astar
+#+END_SRC
+
+#+RESULTS:
+: [[ 1.   0. ]
+:  [ 0.   0.5]]
+
+The reciprocal lattice and therefore the LEED pattern look like:
+
+[[./images/2d-leed-reciproprcal.png]]
+
+•	Given a hexagonal lattice below, what does the LEED pattern look like?
+
+[[./images/2d-leed-hexagonal.png]]
+
+#+BEGIN_SRC python
+import numpy as np
+
+A = np.matrix([[1, 0],
+               [-0.5, np.sqrt(3)/2]]) # note the vectors are in row form
+
+Astar = A.T.I
+print Astar
+#+END_SRC
+
+#+RESULTS:
+: [[ 1.          0.57735027]
+:  [ 0.          1.15470054]]
+
+The reciprocal lattice and therefore the LEED pattern look like
+
+[[./images/2d-hexagonal-leed.png]]
+
+•	Note that the reciprocal lattice is a true lattice.  It extends infinitely in both directions, is periodic, and all point are equivalent.
+
+A real LEED image of a clean Cu(111) surface looks like this:
+
+[[images/actual-leed-image.jpg]]
+
+** Overlayers and Superlattices
+
+•	As noted earlier some surfaces can reconstruct such that the periodicity of the surface is different from that of the bulk termination plane.
+
+•	When atoms or molecules are adsorbed on surfaces they tend to form well defined structures.  They will adsorb in well defined site on the surface and often with long range order or periodicity which is commensurate with the substrate but with longer periodicity.
+
+•	Adsorption sites are often high symmetry sites which optimize the bonding between adsorbate and the surface: on-top, bridging, fcc hollow, hcp hollow etc.
+
+•	The ordered overlayers are actually lattices of atoms or molecules.  If they are commensurate with the substrate this means that they have periodicity or lattice vectors that are linear combinations of the surface lattice vectors.
+
+*** Overlayer Notations
+
+•	Adsorbed atoms also produce ordered overlayers with lattice parameters different from those of the substrate.
+
+#+caption: p(2x1) overlayer on a square lattice.
+[[./images/3-10-overlayer.png]]
+
+•	The superlattice will have its own lattice vectors $(\overrightarrow{b}_1, \overrightarrow{b}_2)$  which may or may not have some simple relationship with the substrate lattice vectors  $(\overrightarrow{a}_1, \overrightarrow{a}_2)$.
+
+•	Those superlattices with lattice vectors that are separated by the same angle as the substrate lattice vectors can be referred to by Wood’s notation.
+
+•	If the lengths are related by 
+
+$|\overrightarrow{b}_1| = x |\overrightarrow{a}_1|$ and $|\overrightarrow{b}_2| = y |\overrightarrow{a}_2|$
+				 
+
+and the angle between the vectors is \varphi, then the notation for the overlayer is 
+
+		$(x \times y)R\varphi$.
+
+#+caption: Example of p(2x2)on a square lattice.
+[[./images/3-11-p-2x2.png]]
+
+
+#+caption: Example of a c(2x2) on a rectangular lattice.
+[[./images/3-12-rectangular.png]]
+
+
+#+caption: Example of a $(\sqrt{7} \times \sqrrt{7})$R19$^\circ{}$ on a hexagonal lattice.
+[[./images/3-13-r19.png]]
+
+
+•	If the angle between the two sets of lattice vectors is not the same then it is not possible to define a Wood’s notation for the superlattice.
+  
+•	The relationship between the two lattices can always be given as
+
+\begin{eqnarray}
+\overrightarrow{b}_1 &=& m_{11} \overrightarrow{a}_1 + m_{12} \overrightarrow{a}_2 \\
+\overrightarrow{b}_2 &=& m_{21} \overrightarrow{a}_1 + m_{22} \overrightarrow{a}_2 
+\end{eqnarray}
+
+•	The overlayer can then be denoted by a simple matrix which transforms the overlayer lattice into the substrate lattice.
+
+$$\left ( \begin{array}{c}\overrightarrow{b}_1 \\ \overrightarrow{b}_2 \right ) = \left[ \begin{array}{cc} m_{11} m_{12} \\ m{21} m_{22} \right] \left ( \begin{array}{c}\overrightarrow{a}_1 \\ \overrightarrow{a}_2 \right ) = \underline{\underline{M}}   \left ( \begin{array}{c}\overrightarrow{a}_1 \\ \overrightarrow{a}_2 \right )$$
+
+
+#+caption: Example of a lattice with a structure requiring matrix notation.
+[[./images/3-14-requires-matrix.png]]
+
+In this example:
+$\overrightarrow{b}_1 = 1\cdot \overrightarrow{a}_1 + 1 \cdot \overrightarrow{a}_2$
+
+and $\overrightarrow{b}_2 = -2cdot \overrightarrow{a}_1 + 1 \cdot \overrightarrow{a}_2$
+
+so:
+
+$$M = \left [ \begin{array}{c} 1 1 \\ -2 1 \right] $$
+
+•	Notice that there are several different choices of lattice vectors that can be used.  All describe the same lattice.
+
+#+caption: Equivalent lattice vectors for  describing the same lattice.
+[[./images/3-15-equivalent-vectors.png]]
+
+•	Also note that there are several different adsorbate overlayers that yield the same lattice. The may have different bases however.
+
+[[./images/3-16-equivalent-overlayers.png]]
+
+*** LEED Patterns from superlattices
+
+•	LEED patterns are produced by diffraction from lattices at surfaces.  The clean unreconstructed surface is said to give a (1 \times 1) pattern.  The LEED pattern would be the reciprocal lattice of the surface lattice vectors determined by termination of the bulk lattice.
+
+•	The LEED pattern is actually a picture of the reciprocal lattice. 
+
+•	One of the primary objectives of the LEED experiment is to identify the periodicity of the overlayer lattice.
+
+•	Since there is a well defined relationship between the reciprocal lattice and the real lattice it is not hard to obtain the real space lattice parameters from the reciprocal space lattice.
+
+**** Example - p(3x3) on an fcc(100) surface.				
+
+•	The fcc(100) lattice is a square array and thus gives a diffraction pattern which is square.
+[[./images/3-17-square-lattice-leed.png]]
+
+[[./images/3-18-overlayer-leed.png]]
+
+
+
+**** Example - ($\sqrt{3} \times \sqrt{3}$)R30$^\circ{}$ on an fcc(111) lattice.
+
+•	The fcc(111) lattice is hexagonal so its diffraction pattern has hexagonal symmetry.
+
+[[./images/hexagonal-lattice-leed.png]]
+
+
+•	An adsorbed layer of atoms on the surface gives the LEED pattern shown below.  Note that the spots would all appear the same except that there are some new ones due to diffraction from the overlayer.
+
+[[./images/3-hexagonal-overlayer-leed.png]]
+
+•	This gives a structure such as the following for the real space lattice.  It is a  $(\sqrt{3} \times \sqrt{3}) R 30^\circ{}$ lattice.
+
+[[./images/3-r3xr3.png]]
+
+Here is what an actual LEED pattern looks like for a clean surface of Cu(111) and a $(\sqrt{3} \times \sqrt{3}) R 30^\circ{}$adsorbate overlayer.
+[[./images/3-actual-r3xr3-leed.png]]
+
+•	Remember that the reciprocal lattice only gives you the real space lattice and not the positions of the atoms in the unit cells or the registry of the lattice with respect to the substrate.
 
 * Footnotes
 
