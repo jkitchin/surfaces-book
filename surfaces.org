@@ -683,6 +683,205 @@ http://surfexp.fhi-berlin.mpg.de/
 
 -	At high enough step density, however, these become unstable and do coalesce into polyatomic steps.
 
+* Computational crystallography
+In this section we show some general tools for computing crystallographic properties, such as unit cell volume, distances, distance between planes, etc... We will only consider the linear algebra approach to these problems. 
+
+First, we consider that every vector has a set of basis vectors it is associated with. For example, the vector $2\vec{a} + 3\vec{y} +4\vec{z} $ can be compactly represented by [2, 3, 4] with the implied cartesian vector basis set:
+
+\begin{eqnarray}
+\hat{e}_1 = 1\vec{x} + 0\vec{y} + 0\vec{z} \\
+\hat{e}_2 = 0\vec{x} + 1\vec{y} + 0\vec{z} \\
+\hat{e}_3 = 0\vec{x} + 0\vec{y} + 1\vec{z} 
+\end{eqnarray}
+
+This special set of vectors is orthonormal (each vector has unit length and is orthogonal to the other vectors). 
+
+** Computing distances between two points
+We know that the length of a vector is simply the square root of the dot-product of the vector with itself, so we can express the distance between two points as the length of the vector connecting them. Let point 1 be defined by a position vector \vec{p} and point 2 by a position vector \vec{q}. We know the distance between point 1 and point 2 is:
+
+$$D = \sqrt{(\vec{q}-\vec{p}) \cdot (\vec{q}-\vec{p})
+}$$
+
+#+BEGIN_SRC python
+import numpy as np
+p = np.array([0,0,0])
+q = np.array([1,1,0])
+
+D = np.sqrt(np.dot((q-p),(q-p)))
+print D
+#+END_SRC
+
+#+RESULTS:
+: 1.41421356237
+
+This only works, however, when the basis vectors are orthonormal! In many unit cells, the lattice vectors are not orthonormal, and it is more difficult to compute distances. To generalize the formula, we need to introduce the metric tensor.cite:graef07:_struc_mater_cryst
+
+
+$$g = \left[ \begin{array}{ccc} 
+               \vec{a}\cdot \vec{a} & \vec{a}\cdot \vec{b} & \vec{a}\cdot \vec{c}\\
+               \vec{b}\cdot \vec{a} & \vec{b}\cdot \vec{b} & \vec{b}\cdot \vec{c}\\
+               \vec{c}\cdot \vec{a} & \vec{c}\cdot \vec{b} & \vec{c}\cdot \vec{c}
+              \end{array} \right]$$
+
+Note that for an orthonormal basis, this matrix is simply the identity matrix. With this definition, we define the distance simply as:
+
+$D = \sqrt{(q-p)\cdot g \cdot (q-p)}$
+
+Here is an example of computing the distance between two points defined in a unit cell basis, i.e. [1/2, 1/3, 1/4] means $1/2 \vec{a} + 1/3\vec{b} + 1/4\vec{c}$ where each lattice vector is in turn defined, e.g. $\vec{a} = 2 \vec{x}$, $\vec{b} = 2\vec{y}$ and $\vec{c} = 3\vec{z}$.
+
+#+BEGIN_SRC python
+import numpy as np
+
+# define lattice vectors
+a = np.array([2, 0, 0])
+b = np.array([0, 2, 0])
+c = np.array([0, 0, 3])
+
+# define metric tensor
+g = np.array([[np.dot(a,a), np.dot(a,b), np.dot(a,c)],
+              [np.dot(b,a), np.dot(b,b), np.dot(b,c)],
+              [np.dot(c,a), np.dot(c,b), np.dot(c,c)]])
+
+# define points
+p = np.array([0.5, 1./3., 0.25])
+q = np.array([1./3., 0.5, 0.75])
+
+# compute distance
+D = np.sqrt(np.dot((p-q), np.dot(g,(p-q))))
+
+print('The distance between the points is {0:1.2f}.'.format(D))
+#+END_SRC
+
+#+RESULTS:
+: The distance between the points is 1.57.
+
+** Computing the angle between two vectors
+When vectors are given in cartesian coordinates, we can easily calculate the length and angles between vectors using the =Scientific.Geometry.Vector= class. Here is an example:
+
+#+BEGIN_SRC python
+import numpy as np
+from Scientific.Geometry import Vector
+
+A = Vector([ 4, 0, 0])
+B = Vector([ 0, 6, 0])
+C = Vector([-2.5, 0, 5*np.sqrt(3)/2.])
+
+print('a = {0} angstroms'.format(A.length()))
+print('b = {0} angstroms'.format(B.length()))
+print('c = {0} angstroms'.format(C.length()))
+print('alpha = {0:1.1f} degrees'.format(B.angle(C)*180./np.pi))
+print('beta  = {0:1.1f} degrees'.format(A.angle(C)*180./np.pi))
+print('gamma = {0:1.1f} degrees'.format(A.angle(B)*180./np.pi))
+#+END_SRC
+
+#+RESULTS:
+: a = 4.0 angstroms
+: b = 6.0 angstroms
+: c = 5.0 angstroms
+: alpha = 90.0 degrees
+: beta  = 120.0 degrees
+: gamma = 90.0 degrees
+
+In the example above, we show how to construct the $a, b, c, \alpha, \beta, \gamma$ representation of a 3D unit cell. 
+
+When the vectors are not given in cartesian coordinates, but rather in some basis set of vectors that is not orthonormal, the example above does not work. We need a different approach to calculate angles between vectors. We define,cite:graef07:_struc_mater_cryst without derivation, that 
+
+$$\theta = \cos^{-1} \frac{\vec{a} \cdot g \cdot \vec{b}}{|a| |b|}$$
+
+
+Let us recalculate the angles between the vectors in the previous example with this equation.
+
+#+BEGIN_SRC python
+import numpy as np
+A = [1, 0, 0]
+B = [0, 1, 0]
+C = [0, 0, 1]
+
+# these are the basis vectors
+a = np.array([ 4, 0, 0])
+b = np.array([ 0, 6, 0])
+c = np.array([-2.5, 0, 5*np.sqrt(3)/2.])
+
+# define metric tensor
+g = np.array([[np.dot(a,a), np.dot(a,b), np.dot(a,c)],
+              [np.dot(b,a), np.dot(b,b), np.dot(b,c)],
+              [np.dot(c,a), np.dot(c,b), np.dot(c,c)]])
+
+alpha = np.arccos(np.dot(B, np.dot(g, C))
+                  /(np.sqrt(np.dot(B, B)) * np.sqrt(np.dot(C, C))))*180./np.pi
+
+print alpha
+#+END_SRC
+
+#+RESULTS:
+: 90.0
+
+
+
+As an example, we consider the vectors [1, 0, 1] and [-2, 0, 1] in the basis vectors [4, 0, 0], [0, 6, 0], and [-2.5, 0, $5\sqrt{3}/2$]. What is the angle between these vectors?
+
+#+BEGIN_SRC python
+import numpy as np
+
+a = np.array([ 4, 0, 0])
+b = np.array([ 0, 6, 0])
+c = np.array([-2.5, 0, 5*np.sqrt(3)/2.])
+
+# define metric tensor
+g = np.array([[np.dot(a,a), np.dot(a,b), np.dot(a,c)],
+              [np.dot(b,a), np.dot(b,b), np.dot(b,c)],
+              [np.dot(c,a), np.dot(c,b), np.dot(c,c)]])
+
+p = np.array([1, 0, 1])
+q = np.array([-2, 0, 1])
+
+lp = np.sqrt(np.dot(p, np.dot(g, p)))
+lq = np.sqrt(np.dot(q, np.dot(g, q)))
+
+theta = np.arccos(np.dot(p, np.dot(g, q))/(lp * lq))
+print 'The angle between the vectors is {0:1.2f} degrees.'.format(theta * 180. / np.pi)
+
+#+END_SRC
+
+#+RESULTS:
+: The angle between the vectors is 86.70 degrees.
+
+** Computing Unit cell volumes
+The volume of a unit cell is particularly simple to compute from the unit cell vectors: $ V = |\det U|$ where U is the unit cell vector matrix.  We must take the absolute value because the order of vectors is arbitrary, and some orders will result in negative determinants.
+
+Let us consider a trivial example of the volume of a cube first. 
+
+#+BEGIN_SRC python
+import numpy as np
+
+a = np.array([5, 0, 0])
+b = np.array([0, 5, 0])
+c = np.array([0, 0, 5])
+
+U = np.vstack([a, b, c])
+print('V = {0:1.3f} ang^3'.format(np.abs(np.linalg.det(U))))
+#+END_SRC
+
+#+RESULTS:
+: V = 125.000 ang^3
+
+Now,  consider the primitive lattice vectors of an fcc lattice with a lattice constant of 5 and ask what is the volume? 
+
+#+BEGIN_SRC python
+import numpy as np
+
+U = 5.0 * np.array([[0.5, 0.5, 0.0],
+                    [0.5, 0.0, 0.5],
+                    [0.0, 0.5, 0.5]])
+
+print('V = {0:1.3f} ang^3'.format(np.abs(np.linalg.det(U))))
+
+#+END_SRC 
+
+#+RESULTS:
+: V = 31.250 ang^3
+
+No geometry required! Note that the volume of the primitive cell is 1/4 of the conventional cubic cell. Naturally, the primitive cell has one atom in it, whereas the conventional cell has four atoms in it.
 
 * Low Energy Electron Diffraction (LEED)
 
