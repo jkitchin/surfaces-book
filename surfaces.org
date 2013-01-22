@@ -5,7 +5,7 @@
 #+DESCRIPTION:
 #+KEYWORDS: Surface science
 #+LANGUAGE:  en
-#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
 #+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:nil pri:nil tags:not-in-toc
 #+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
 #+EXPORT_SELECT_TAGS: export
@@ -15,8 +15,9 @@
 #+XSLT:
 #+latex_header: \usepackage{natbib}
 #+latex_header: \usepackage{amsmath}
+#+latex_header: \usepackage{url}
 
-    Copyright \copyright 2013--\the\year\ John Kitchin, Andrew Gellman\par
+    Copyright \copyright 2013--\the\year John Kitchin, Andrew Gellman\par
     Permission is granted to copy, distribute and/or modify this document
     under the terms of the GNU Free Documentation License, Version 1.3
     or any later version published by the Free Software Foundation;
@@ -97,15 +98,13 @@ This package is free for academic use, and available for Windows, Macs and Linux
 -	Electrons and ions interact very strongly with matter and so they cannot penetrate or escape from the bulk of a solid.  In scattering or emission experiments they only sample the surface.
 
 #+caption: The XPS experiment with electrons coming from the surface only.  X-rays penetrate the surface but electrons photemitted from the bulk cannot escape.
+#+ATTR_LaTeX: placement=[H]
 [[./images/xps-1.png]]
-*************** TODO consider redrawing in inkscape
-*************** END
-
 
 #+caption: The universal curve of electron mean free paths in solids.  The mean free path is the mean distance traveled before an electron is scattered by an atom.  This curve has been obtained from measurements made with many materials.
+#+ATTR_LaTeX: placement=[H]
 [[./images/mean-free-path.png]]
-*************** TODO replace with my version, which i have to find
-*************** END
+
 
 -	Ions are even more surface sensitive than electrons.  Low energy ions (less than 100 eV) do not penetrate the bulk at all.
 
@@ -117,6 +116,7 @@ This package is free for academic use, and available for Windows, Macs and Linux
   +	photon  in  $\rightarrow$  photon  out
 
 #+caption: Photon in \rightarrow photon out only detecting sulfur atoms on a surface.  If there were high concentrations of sulfur in the bulk then the bulk signal would swamp the signal from the surface atoms.
+#+ATTR_LaTeX: placement=[H]
 [[./images/photon-in-photon-out.png]]
 
 ** Surface Cleanliness
@@ -202,9 +202,11 @@ $$\left\{ \left( x_i^m, y_i^m, z_i^m \right) \right\} i \in I, m-type$$ [fn:2]
 -	The first direct observation of atoms was on surfaces and was made using Field Ion Microscopy (Muller and Bahadur, Oct. 11, 1955).
 
 #+caption: Field ion emission microscope.  The metal tips has a high applied potential (\approx 25 kV).  He atoms are ionized at the points of high field gradient (atoms at step edges and then accelerated away from the tip along the field lines.  They are imaged on a phosphorus screen.
+#+ATTR_LaTeX: placement=[H]
 [[./images/fem-unknown-origin.jpg]]
 
 #+caption: Field ion micrograph of a tungsten tip.  The atomic structures of various planes are easily observable.
+#+ATTR_LaTeX: placement=[H]
 [[./images/Field-ion-micrograph-unknown-origin.jpg]]
 
 - In general we consider three types of solids and the surfaces that
@@ -528,6 +530,7 @@ centered cubic, body centered cubic or hexagonal close packed.
         equivalent directions that expose identical faces.
 
 #+caption: The arrows indicate symmetrically equivalent surfaces.
+#+ATTR_LaTeX: placement=[H]
 [[./images/equivalent-faces.png]]
 
 -	For atomic lattices or even molecular lattices one does not usually think of cutting "through" atoms or molecules. Cuts pass between atoms and expose those whose centers lie to one side of the cutting plane.
@@ -541,7 +544,7 @@ centered cubic, body centered cubic or hexagonal close packed.
 *** Miller Index Formulation
 
 -	For a plane cut through a lattice:
- 1.	Find the intersections (b_x, b_y, b_z) with b_i > 1 along each of
+ 1.	Find the intersections (b_x, b_y, b_z) with b_i $>$ 1 along each of
         the three lattice vectors (in units of the vector length).
  2.	Find the lowest common denominator of the three lengths.
 
@@ -597,30 +600,38 @@ In line [[(gcd)]] we import the =gcd= function from the fractions module. Line [
 
 *** The most common fcc surfaces
 #+caption: fcc(111)
+#+ATTR_LaTeX: placement=[H]
 [[./images/fcc-111.png]]
 
 #+caption: fcc(100)
+#+ATTR_LaTeX: placement=[H]
 [[./images/fcc-100.png]]
 
 #+caption: fcc(110)
+#+ATTR_LaTeX: placement=[H]
 [[./images/fcc-110.png]]
 
 *** The most common bcc surfaces
 #+caption: bcc(110)
+#+ATTR_LaTeX: placement=[H]
 [[./images/bcc-110.png]]
 
 #+caption: bcc(100)
+#+ATTR_LaTeX: placement=[H]
 [[./images/bcc100.png]]
 
 #+caption: bcc(111)
+#+ATTR_LaTeX: placement=[H]
 [[./images/bcc-111.png]]
 
 *** hcp surfaces
 
 #+caption: hcp(001)
+#+ATTR_LaTeX: placement=[H]
 [[./images/hcp-001.png]]
 
 #+caption: hcp(100)
+#+ATTR_LaTeX: placement=[H]
 [[./images/hcp-100.png]]
 
 ** 	High Miller Index Surfaces
@@ -686,7 +697,7 @@ http://surfexp.fhi-berlin.mpg.de/
 * Computational crystallography
 In this section we show some general tools for computing crystallographic properties, such as unit cell volume, distances, distance between planes, etc... We will only consider the linear algebra approach to these problems. 
 
-First, we consider that every vector has a set of basis vectors it is associated with. For example, the vector $2\vec{a} + 3\vec{y} +4\vec{z} $ can be compactly represented by [2, 3, 4] with the implied cartesian vector basis set:
+First, we consider that every vector has a set of basis vectors it is associated with. For example, the vector \( 2\vec{a} + 3\vec{y} +4\vec{z} \) can be compactly represented by [2, 3, 4] with the implied cartesian vector basis set:
 
 \begin{eqnarray}
 \hat{e}_1 = 1\vec{x} + 0\vec{y} + 0\vec{z} \\
@@ -697,7 +708,7 @@ First, we consider that every vector has a set of basis vectors it is associated
 This special set of vectors is orthonormal (each vector has unit length and is orthogonal to the other vectors). 
 
 ** Computing distances between two points
-We know that the length of a vector is simply the square root of the dot-product of the vector with itself, so we can express the distance between two points as the length of the vector connecting them. Let point 1 be defined by a position vector \vec{p} and point 2 by a position vector \vec{q}. We know the distance between point 1 and point 2 is:
+We know that the length of a vector is simply the square root of the dot-product of the vector with itself, so we can express the distance between two points as the length of the vector connecting them. Let point 1 be defined by a position vector $\vec{p}$ and point 2 by a position vector $\vec{q}$. We know the distance between point 1 and point 2 is:
 
 $$D = \sqrt{(\vec{q}-\vec{p}) \cdot (\vec{q}-\vec{p})
 }$$
@@ -818,7 +829,7 @@ print alpha
 
 
 
-As an example, we consider the vectors [1, 0, 1] and [-2, 0, 1] in the basis vectors [4, 0, 0], [0, 6, 0], and [-2.5, 0, $5\sqrt{3}/2$]. What is the angle between these vectors?
+As an example, we consider the vectors [1, 0, 1] and [-2, 0, 1] in the basis vectors [4, 0, 0], [0, 6, 0], and \([-2.5, 0, 5\sqrt{3}/2]\). What is the angle between these vectors?
 
 #+BEGIN_SRC python
 import numpy as np
@@ -846,8 +857,8 @@ print 'The angle between the vectors is {0:1.2f} degrees.'.format(theta * 180. /
 #+RESULTS:
 : The angle between the vectors is 86.70 degrees.
 
-** Computing Unit cell volumes
-The volume of a unit cell is particularly simple to compute from the unit cell vectors: $ V = |\det U|$ where U is the unit cell vector matrix.  We must take the absolute value because the order of vectors is arbitrary, and some orders will result in negative determinants.
+** Computing unit cell volumes
+The volume of a unit cell is particularly simple to compute from the unit cell vectors: \(V = |\det U|\) where U is the unit cell vector matrix.  We must take the absolute value because the order of vectors is arbitrary, and some orders will result in negative determinants.
 
 Let us consider a trivial example of the volume of a cube first. 
 
@@ -883,6 +894,145 @@ print('V = {0:1.3f} ang^3'.format(np.abs(np.linalg.det(U))))
 
 No geometry required! Note that the volume of the primitive cell is 1/4 of the conventional cubic cell. Naturally, the primitive cell has one atom in it, whereas the conventional cell has four atoms in it.
 
+** The reciprocal lattice in crystallography
+The reciprocal lattice is a convenient, alternative set of basis vectors that are defined by:
+
+$$A \cdot A^{*T} = I$$
+
+Or,
+
+$$ A^* = (A^{-1})^T$$
+
+Let us consider a brief example:
+
+#+BEGIN_SRC python
+import numpy as np
+
+# primitive fcc lattice
+A = 3.61*np.array([[0.0, 0.5, 0.5],
+                   [0.5, 0.0, 0.5],
+                   [0.5, 0.5, 0.0]])
+
+Astar = np.linalg.inv(A).T
+
+print Astar
+#+END_SRC
+
+#+RESULTS:
+: [[-0.27700831  0.27700831  0.27700831]
+:  [ 0.27700831 -0.27700831  0.27700831]
+:  [ 0.27700831  0.27700831 -0.27700831]]
+
+It is of some interest that the reciprocal lattice of the fcc lattice has the same symmetry as the bcc lattice!
+
+The reciprocal lattice is of particular significance because a a vector in the reciprocal lattice basis set with components (h, k, l) is normal to the surface plane with Miller indices (h, k, l). Furthermore, the distance between the planes with Miller indices is related inversely to the length of the reciprocal lattice vector. Thus, we find ourselves needing to conveniently calculate the length of a reciprocal lattice vector, which may be defined in a non-orthornormal set of basis vectors. As we did in real space, we  define the reciprocal metric tensor:
+
+$$g^* = \left [ \begin{array}{ccc} a^*\cdot a^* & a^*\cdot b^* & a^*\cdot c^* \\
+                                   b^*\cdot a^* & b^*\cdot b^* & b^*\cdot c^* \\
+                                   c^*\cdot a^* & c^*\cdot b^* & c^*\cdot c^* \end{array}
+                                   \right ]$$
+
+As we saw in the real space computational crystallography section, the reciprocal metric tensor is useful in computing quantities in the reciprocal basis vector space.
+
+For example, given a cubic crystal with a lattice constant of 2, compute the distance between the (110) planes. It was stated that the distance between two planes is inversely related to the length of the reciprocal lattice vector with components of the Miller indices that defines the plane of interest. 
+
+#+BEGIN_SRC python
+import numpy as np
+
+A = np.array([[2, 0, 0],
+              [0, 2, 0],
+              [0, 0, 2]])
+
+Astar = np.linalg.inv(A).T
+
+astar = Astar[0, :]
+bstar = Astar[1, :]
+cstar = Astar[2, :]
+
+gstar = np.array([[np.dot(astar, astar), np.dot(astar, bstar), np.dot(astar, cstar)],
+                  [np.dot(bstar, astar), np.dot(bstar, bstar), np.dot(bstar, cstar)],
+                  [np.dot(cstar, astar), np.dot(cstar, bstar), np.dot(cstar, cstar)]])
+
+# MUCH more compact definition of g*
+gstar = np.dot(Astar, Astar.T)
+
+v = [1, 1, 0]
+
+d_110 = np.sqrt(np.dot(v, np.dot(gstar, v))) 
+
+spacing = 1./d_110
+print 'The spacing between the planes is {0}.'.format(spacing)
+#+END_SRC
+
+#+RESULTS:
+: The spacing between the planes is 1.41421356237.
+
+Let us consider another example, with a more complex unit cell. Find the spacing between (111) planes for the following unit cell. 
+
+# adapted from page 125 in degraef 
+#+BEGIN_SRC python
+import numpy as np
+
+# these are the basis vectors
+a = np.array([ 3, 0, 0])
+b = np.array([-2, 0, 4*np.sqrt(3)/2.])
+c = np.array([ 0, 6, 0])
+
+
+A = np.vstack([a, b, c])
+
+Astar = np.linalg.inv(A).T
+
+# define reciprocal metric tensor
+gstar = np.dot(Astar, Astar.T)
+
+v = [1, 1, 1]
+dstar_111 = np.sqrt(np.dot(v, np.dot(gstar, v)))
+print 'd = ', 1./dstar_111
+
+#+END_SRC
+
+#+RESULTS:
+: d =  1.64316767252
+
+The linear algebra notation we use here is very compact, and avoids the need to memorize the special equations that are valid for specific crystal systems. 
+
+** Coordinate system transformations
+It is frequently convenient to work in different coordinate systems. For example, the cartesian coordinate system is intuitive, but it can be difficult to tell if a position is inside a unit cell that if the unit cell vectors are not orthogonal. In this case it can be convenient to work in fractional coordinates, where the point uses the unit cell vectors as a basis. Alternatively, if there is a lattice, it may be convenient to use the primitive lattice vectors as a basis, because then all points will have vectors with integer components. It is not difficult to interchange between these different basis sets if we understand some linear algebra.
+
+Let us consider computing the fractional coordinates of a position in the unit cell basis set. Given a point at $\vec{p} = p_1 \hat{x} + p_2 \hat{y} + p_3 \hat{z}$, and the unit cell vectors $\underline{\underline{A}} = \left [ \begin{array}{c}\vec{a} \\ \vec{b}\\ \vec{c} \end{array} \right ]$, we can express the fractional coordinates as
+
+$$ \vec{s} = (\underline{\underline{A}}^T)^{-1} \vec{p}^T$$
+
+$\vec{s}$ conventionally has components between 0 and 1, and anything less than zero or greater than one is outside the unit cell.
+
+Let us consider another example. Let us compute the unit cell vectors of the conventional fcc unit cell in the primitive lattice vector basis set. 
+
+#+BEGIN_SRC python -n -r -l "#(ref:%s)"
+import numpy as np
+
+# conventional vectors
+A = np.array([[1, 0, 0],
+              [0, 1, 0],
+              [0, 0, 1]])
+
+P = np.array([[0.0, 0.5, 0.5],
+              [0.5, 0.0, 0.5],
+              [0.5, 0.5, 0.0]])
+
+a = np.dot(np.linalg.inv(P.T), A.T).T  #(ref:TTT)
+
+print a
+#+END_SRC 
+
+#+RESULTS:
+: [[-1.  1.  1.]
+:  [ 1. -1.  1.]
+:  [ 1.  1. -1.]]
+
+The vectors should have components that are all integers (every lattice point must be an integer linear combination of the primitive lattice vectors). There is an important note to consider about line [[(TTT)]] and that is the final transpose of the dot product. Without this, the components of the transformed vectors are in /columns/, and we have constructed everything in /rows/. In this specific case, it does not matter because the matrix is highly symmetric, and the transpose does not change it. In less symmetric cases, it can matter a lot, and it is important to keep the linear algebra in mind. The vector of the point being transformed must be a column vector, or a matrix with the components going column-wise.
+
+
 * Low Energy Electron Diffraction (LEED)
 
 -	As mentioned the structures of surface are not just what they would appear to be from cleaving of the bulk crystal.  Reconstructions can occur that change the periodicity of the surface lattice.  Relaxations cause changes in the layer spacings at solid surfaces.  Furthermore, adsorbed atoms and molecules can create new surface lattices, induce reconstructions or even remove the reconstructions of the clean surfaces.
@@ -900,6 +1050,7 @@ No geometry required! Note that the volume of the primitive cell is 1/4 of the c
 [[./images/leed-optics.png]]
 
 #+caption: Potential energy profile seen by the electron beam.
+#+ATTR_LaTeX: placement=[H]
 [[./images/pe-leed-profile.png]]
 
 -	The phosphorus screen allows easy and cheap visualization of the LEED pattern.  Usually a photograph is taken of the back side of the screen.  This projects the diffraction pattern onto a plane.
@@ -931,28 +1082,28 @@ $$a(\sin \phi_h - \sin \phi_0) = h \lambda$$
 
 for $h \in I$. For a given incident angle $\varphi_0$ this determines the angles $\varphi_h$ at which diffracted beams appear.
 
-•	Another way of writing this equation is to think of the lattice spacing as a vector $\overrightarrow{a}$  and the incident and scattered waves as traveling along directions given by the unit vectors $\hat{s}_0$  and $\hat{s}_h$.
+•	Another way of writing this equation is to think of the lattice spacing as a vector $\vec{a}$  and the incident and scattered waves as traveling along directions given by the unit vectors $\hat{s}_0$  and $\hat{s}_h$.
 
 [[./images/3-5-vector-diffraction.png]]
 
 •	Then the diffraction condition can be written as
-$$\overrightarrow{a}\cdot (\hat{s}_h - \hat{s}_0) = h \lambda$$
+$$\vec{a}\cdot (\hat{s}_h - \hat{s}_0) = h \lambda$$
 
-Consider the 2D diffraction problem from a lattice with vectors $\overrightarrow{a}_1$  and $\overrightarrow{a}_2$.  The beam is incident along a vector $\hat{s}_0$  and diffracting in a direction $\hat{s}_{hk}$.
+Consider the 2D diffraction problem from a lattice with vectors $\vec{a}_1$  and $\vec{a}_2$.  The beam is incident along a vector $\hat{s}_0$  and diffracting in a direction $\hat{s}_{hk}$.
 
 [[./images/3-6-2d-diffraction.png]]
 
 •	Now the diffraction conditions are given by
 
-		$$\overrightarrow{a}_1 \cdot (\hat {s}_{hk} - \hat{s}_0) = h \lambda$$		 
+		$$\vec{a}_1 \cdot (\hat {s}_{hk} - \hat{s}_0) = h \lambda$$		 
 
 		and
- 		$$\overrightarrow{a}_2 \cdot (\hat {s}_{hk} - \hat{s}_0) = k \lambda$$.
+ 		$$\vec{a}_2 \cdot (\hat {s}_{hk} - \hat{s}_0) = k \lambda$$.
 
 Both must be satisfied in order to get diffraction
 
 ** The reciprocal lattice
-For any lattice vectors, $(\overrightarrow{a}_1, \overrightarrow{a}_2)$, we can define a new set of vectors, which we call the reciprocal lattice $(\overrightarrow{a}_1^*, \overrightarrow{a}_2^*)$ based on these definitions:
+For any lattice vectors, $(\vec{a}_1, \vec{a}_2)$, we can define a new set of vectors, which we call the reciprocal lattice $(\vec{a}_1^*, \vec{a}_2^*)$ based on these definitions:
 
 [[./images/3-7-reciprocal.png]]
 
@@ -960,9 +1111,9 @@ For any lattice vectors, $(\overrightarrow{a}_1, \overrightarrow{a}_2)$, we can 
 
 •	The power of this construction is that it provides us with the solutions to the diffraction problem.  The directions in which diffraction occurs are given by
 
-$$\hat{s} - \hat{s}_0 = h \lambda \overrightarrow{a}_1^* - k \lambda \overrightarrow{a}_2^*$$.
+$$\hat{s} - \hat{s}_0 = h \lambda \vec{a}_1^* - k \lambda \vec{a}_2^*$$.
 
-Let us consider a general approach to computing the reciprocal lattice. First, we consider how to represent the vectors in the form of a matrix. For the two lattice vectors $\overrightarrow{a}_1$ and $\overrightarrow{a}_2$, we express them in a matrix as: $A = [\overrightarrow{a}_1 \overrightarrow{a}_2]$. We next consider the reciprocal lattice vectors, $A^* = \left[ \begin{array}{c}  \overrightarrow{a}_1^* \\ \overrightarrow{a}_2^* \end{array}\right]$ Now, we have the following equation: $A \cdot A^* = I$, where $I$ is the identity matrix. We can readily solve for the reciprocal lattice vectors as $A^* = I \cdot A^{-1} = A^{-1}$.
+Let us consider a general approach to computing the reciprocal lattice. First, we consider how to represent the vectors in the form of a matrix. For the two lattice vectors $\vec{a}_1$ and $\vec{a}_2$, we express them in a matrix as: $A = [\vec{a}_1 \vec{a}_2]$. We next consider the reciprocal lattice vectors, $A^* = \left[ \begin{array}{c}  \vec{a}_1^* \\ \vec{a}_2^* \end{array}\right]$ Now, we have the following equation: $A \cdot A^* = I$, where $I$ is the identity matrix. We can readily solve for the reciprocal lattice vectors as $A^* = I \cdot A^{-1} = A^{-1}$.
 
 Let us consider a specific example where $a_1 = 1x + 0y$ and $a_2 = 0x + 2y$.
 
@@ -975,12 +1126,12 @@ a2 = [0, 2]
 A = np.vstack([a1, a2])   #(ref:vstack)
 print('A = \n{0}'.format(A))
 
-Astar = np.linalg.inv(A)    #(ref:inv)
+Astar = np.linalg.inv(A)    #(ref:invc)
 
 a1star= Astar[0]            #(ref:a1*)
 a2star = Astar[1]
 print 'a1* = {0}'.format(a1star)
-print 'a1* = {0}'.format(a2star)
+print 'a2* = {0}'.format(a2star)
 
 # Verify the requirements.
 print np.dot(a1, a1star)    #(ref:dot)
@@ -1003,7 +1154,7 @@ print np.dot(a2, a2star)
 This method works generally for 2 and 3 dimensional lattices. Some notes about the code above:
 1. In line [[(a1)]] we represent the components of the vector as a /list/.
 2. In line [[(vstack)]] we create an array by using numpy.vstack. This makes the columns of the array the components of the vector. An array is not the same as a matrix!
-3. In line[[ (inv)]] we calculate the inverse of the array. Note that now the components of the reciprocal lattice vectors are in the /rows/ of the resulting array.
+3. In line [[(invc)]] we calculate the inverse of the array. Note that now the components of the reciprocal lattice vectors are in the /rows/ of the resulting array.
 4. In line [[(a1*)]] we use indexing to extract the first row. In Python, indexing starts at 0.
 5. In line [[(dot)]] we must use the numpy.dot function to get the matrix multiplication, or dot product of the two vectors. The * operator will perform element-wise multiplication.
 
@@ -1021,14 +1172,14 @@ This method works generally for 2 and 3 dimensional lattices. Some notes about t
 
 •	Define an origin for the reciprocal lattice and then imagine a set of rods drawn perpendicular to the surface through the reciprocal lattice points. 
 
-•	Finally, draw a sphere of radius $r=\frac{1}{\lambda}   over the lattice centered at a point $\frac{-\hat{s}_0}{\lambda}$  from the origin of the reciprocal lattice.
+•	Finally, draw a sphere of radius $r=\frac{1}{\lambda}$   over the lattice centered at a point $\frac{-\hat{s}_0}{\lambda}$  from the origin of the reciprocal lattice.
 
 [[./images/3-8-ewald.png]]
 
 •	The directions in which one gets diffraction beams  are given by the intersections of the reciprocal lattice rods with the sphere.
 
 \begin{eqnarray}
-\frac{1}{\lambda}\sin \varphi_h = \frac{1}{lambda}\varphi_0 + \frac{h}{a}\\
+\frac{1}{\lambda}\sin \varphi_h = \frac{1}{\lambda}\varphi_0 + \frac{h}{a}\\
 a \cdot (\sin \varphi_h - \sin \varphi_0) = h \lambda
 \end{eqnarray}
 
@@ -1036,7 +1187,7 @@ a \cdot (\sin \varphi_h - \sin \varphi_0) = h \lambda
 
 •	As the crystal is rotated the image on the screen will rotate also.
 
-•	As the energy of the beam increases, $\frac{1}{\lambda}   increases and the number of beams intersecting the screen increases.  What one sees is that the reflected beam stays put but the diffracted beams converge onto the reflected beam.
+•	As the energy of the beam increases, $\frac{1}{\lambda}$   increases and the number of beams intersecting the screen increases.  What one sees is that the reflected beam stays put but the diffracted beams converge onto the reflected beam.
 
 •	From the image one can determine the real space lattice but nothing more.  True structural information comes from the beam intensities.
 
@@ -1050,7 +1201,7 @@ a \cdot (\sin \varphi_h - \sin \varphi_0) = h \lambda
 
 The lengths of the real space lattice vectors are:
 
-	$|\overrightarrow{a}_1|=1$ and $|\overrightarrow{a}_2|=2$	 
+	$|\vec{a}_1|=1$ and $|\vec{a}_2|=2$	 
 
 Let us use python to compute the reciprocal lattice vectors.
 
@@ -1097,8 +1248,7 @@ The reciprocal lattice and therefore the LEED pattern look like
 •	Note that the reciprocal lattice is a true lattice.  It extends infinitely in both directions, is periodic, and all point are equivalent.
 
 A real LEED image of a clean Cu(111) surface looks like this:
-
-[[images/actual-leed-image.jpg]]
+[[./images/actual-leed-image.jpg]]
 
 ** Overlayers and Superlattices
 
@@ -1115,30 +1265,34 @@ A real LEED image of a clean Cu(111) surface looks like this:
 •	Adsorbed atoms also produce ordered overlayers with lattice parameters different from those of the substrate.
 
 #+caption: p(2x1) overlayer on a square lattice.
+#+ATTR_LaTeX: placement=[H]
 [[./images/3-10-overlayer.png]]
 
-•	The superlattice will have its own lattice vectors $(\overrightarrow{b}_1, \overrightarrow{b}_2)$  which may or may not have some simple relationship with the substrate lattice vectors  $(\overrightarrow{a}_1, \overrightarrow{a}_2)$.
+•	The superlattice will have its own lattice vectors $(\vec{b}_1, \vec{b}_2)$  which may or may not have some simple relationship with the substrate lattice vectors  $(\vec{a}_1, \vec{a}_2)$.
 
 •	Those superlattices with lattice vectors that are separated by the same angle as the substrate lattice vectors can be referred to by Wood’s notation.
 
 •	If the lengths are related by 
 
-$|\overrightarrow{b}_1| = x |\overrightarrow{a}_1|$ and $|\overrightarrow{b}_2| = y |\overrightarrow{a}_2|$
+$|\vec{b}_1| = x |\vec{a}_1|$ and $|\vec{b}_2| = y |\vec{a}_2|$
 				 
 
-and the angle between the vectors is \varphi, then the notation for the overlayer is 
+and the angle between the vectors is $\varphi$, then the notation for the overlayer is 
 
 		$(x \times y)R\varphi$.
 
-#+caption: Example of p(2x2)on a square lattice.
+#+caption: Example of p(2 \times 2)on a square lattice.
+#+ATTR_LaTeX: placement=[H]
 [[./images/3-11-p-2x2.png]]
 
 
-#+caption: Example of a c(2x2) on a rectangular lattice.
+#+caption: Example of a c(2 \times 2) on a rectangular lattice.
+#+ATTR_LaTeX: placement=[H]
 [[./images/3-12-rectangular.png]]
 
 
-#+caption: Example of a $(\sqrt{7} \times \sqrrt{7})$R19$^\circ{}$ on a hexagonal lattice.
+#+caption: Example of a \((\sqrt{7} \times \sqrt{7})\) R19\(^\circ{}\) on a hexagonal lattice.
+#+ATTR_LaTeX: placement=[H]
 [[./images/3-13-r19.png]]
 
 
@@ -1147,30 +1301,32 @@ and the angle between the vectors is \varphi, then the notation for the overlaye
 •	The relationship between the two lattices can always be given as
 
 \begin{eqnarray}
-\overrightarrow{b}_1 &=& m_{11} \overrightarrow{a}_1 + m_{12} \overrightarrow{a}_2 \\
-\overrightarrow{b}_2 &=& m_{21} \overrightarrow{a}_1 + m_{22} \overrightarrow{a}_2 
+\vec{b}_1 &=& m_{11} \vec{a}_1 + m_{12} \vec{a}_2 \\
+\vec{b}_2 &=& m_{21} \vec{a}_1 + m_{22} \vec{a}_2 
 \end{eqnarray}
 
 •	The overlayer can then be denoted by a simple matrix which transforms the overlayer lattice into the substrate lattice.
 
-$$\left ( \begin{array}{c}\overrightarrow{b}_1 \\ \overrightarrow{b}_2 \right ) = \left[ \begin{array}{cc} m_{11} m_{12} \\ m{21} m_{22} \right] \left ( \begin{array}{c}\overrightarrow{a}_1 \\ \overrightarrow{a}_2 \right ) = \underline{\underline{M}}   \left ( \begin{array}{c}\overrightarrow{a}_1 \\ \overrightarrow{a}_2 \right )$$
+$$\left ( \begin{array}{c}\vec{b}_1 \\ \vec{b}_2 \end{array} \right ) = \left [ \begin{array}{cc} m_{11} m_{12} \\ m_{21} m_{22} \end{array} \right] \left ( \begin{array}{c}\vec{a}_1 \\ \vec{a}_2 \end{array} \right ) = \underline{\underline{M}}   \left ( \begin{array}{c}\vec{a}_1 \\ \vec{a}_2 \end{array} \right )$$
 
 
 #+caption: Example of a lattice with a structure requiring matrix notation.
+#+ATTR_LaTeX: placement=[H]
 [[./images/3-14-requires-matrix.png]]
 
 In this example:
-$\overrightarrow{b}_1 = 1\cdot \overrightarrow{a}_1 + 1 \cdot \overrightarrow{a}_2$
+$\vec{b}_1 = 1\cdot \vec{a}_1 + 1 \cdot \vec{a}_2$
 
-and $\overrightarrow{b}_2 = -2cdot \overrightarrow{a}_1 + 1 \cdot \overrightarrow{a}_2$
+and $\vec{b}_2 = -2 \cdot \vec{a}_1 + 1 \cdot \vec{a}_2$
 
 so:
 
-$$M = \left [ \begin{array}{c} 1 1 \\ -2 1 \right] $$
+$$M = \left [ \begin{array}{cc} 1 & 1 \\ -2 & 1 \end{array} \right] $$
 
 •	Notice that there are several different choices of lattice vectors that can be used.  All describe the same lattice.
 
 #+caption: Equivalent lattice vectors for  describing the same lattice.
+#+ATTR_LaTeX: placement=[H]
 [[./images/3-15-equivalent-vectors.png]]
 
 •	Also note that there are several different adsorbate overlayers that yield the same lattice. The may have different bases however.
@@ -1179,15 +1335,15 @@ $$M = \left [ \begin{array}{c} 1 1 \\ -2 1 \right] $$
 
 *** LEED Patterns from superlattices
 
-•	LEED patterns are produced by diffraction from lattices at surfaces.  The clean unreconstructed surface is said to give a (1 \times 1) pattern.  The LEED pattern would be the reciprocal lattice of the surface lattice vectors determined by termination of the bulk lattice.
+-	LEED patterns are produced by diffraction from lattices at surfaces.  The clean unreconstructed surface is said to give a (1 \times 1) pattern.  The LEED pattern would be the reciprocal lattice of the surface lattice vectors determined by termination of the bulk lattice.
 
-•	The LEED pattern is actually a picture of the reciprocal lattice. 
+-	The LEED pattern is actually a picture of the reciprocal lattice. 
 
-•	One of the primary objectives of the LEED experiment is to identify the periodicity of the overlayer lattice.
+-	One of the primary objectives of the LEED experiment is to identify the periodicity of the overlayer lattice.
 
-•	Since there is a well defined relationship between the reciprocal lattice and the real lattice it is not hard to obtain the real space lattice parameters from the reciprocal space lattice.
+-	Since there is a well defined relationship between the reciprocal lattice and the real lattice it is not hard to obtain the real space lattice parameters from the reciprocal space lattice.
 
-**** Example - p(3x3) on an fcc(100) surface.				
+**** Example - p(3 \times 3) on an fcc(100) surface.				
 
 •	The fcc(100) lattice is a square array and thus gives a diffraction pattern which is square.
 [[./images/3-17-square-lattice-leed.png]]
@@ -1211,10 +1367,112 @@ $$M = \left [ \begin{array}{c} 1 1 \\ -2 1 \right] $$
 
 [[./images/3-r3xr3.png]]
 
-Here is what an actual LEED pattern looks like for a clean surface of Cu(111) and a $(\sqrt{3} \times \sqrt{3}) R 30^\circ{}$adsorbate overlayer.
+Here is what an actual LEED pattern looks like for a clean surface of Cu(111) and a \((\sqrt{3} \times \sqrt{3}) R 30^\circ{}\) adsorbate overlayer.
+
 [[./images/3-actual-r3xr3-leed.png]]
 
 •	Remember that the reciprocal lattice only gives you the real space lattice and not the positions of the atoms in the unit cells or the registry of the lattice with respect to the substrate.
+
+** General Reciprocal Space to Real Space Conversion
+•	There is a general means for converting a reciprocal lattice into a real space lattice.
+
+•	The usual type of problem is one in which the substrate lattice (1x1) is known and what one is trying to do is to determine the unit cell of the overlayer in terms of the substrate lattice vectors.
+
+•	Basically the problem is to find  M, the matrix which relates the overlayer lattice to the surface lattice.
+
+*** Example - LEED of \( (\sqrt{2} \times \sqrt{2})R45^\circ{}\) on an fcc(100) lattice.
+
+[[./images/leed-root2-root2-example.png]]
+
+•	Find the reciprocal lattice vectors from the LEED pattern. You can usually tell which pattern belongs to the surface atoms; they are the ones with the longest spacings (because they are the closest together).
+
+$$\vec{b}_1^* = \frac{1}{2} \vec{a}_1^* + \frac{1}{2} \vec{a}_2^*$$
+$$\vec{b}_2^* = \frac{1}{2} \vec{a}_1^* - \frac{1}{2} \vec{a}_2^*$$
+
+•	Find the reciprocal space overlayer matrix.
+
+$$M* = \frac{1}{2} \left [\begin{array}{cc} 1 & 1 \\ 1 & -1 \end{array} \right ]$$
+
+•	Find the real space overlayer matrix from the reciprocal space overlayer matrix.
+
+$M = [(M*)^T]^{-1}$
+
+•	Use the real space matrix to find the unit cell of the overlayer lattice.
+
+$$ b = M \left [ \begin{array}{c} \vec{a}_1 \\ \vec{a}_2 \end{array} \right ]$$
+
+#+BEGIN_SRC python
+import numpy as np
+
+Mstar = 0.5 * np.array([[1, 1], [1, -1]])
+
+M = np.linalg.inv(Mstar.T)
+print M
+
+
+
+#+END_SRC
+
+#+RESULTS:
+: [[ 1.  1.]
+:  [ 1. -1.]]
+
+•	Note that all we know is the scaling and the orientation of the overlayer unit cell with respect to the substrate lattice.  We do not know the registry or the contents of the unit cell.
+
+•	Note that the area of the unit cell is A = 2.  In other words it contains two substrate atoms.
+
+•	In terms of the area of the substrate lattice the superlattice area is
+
+$area = | \vec{b}_1 \times \vec{b}_2$ |
+
+•	The coverage of the adsorbate must be some multiple of the inverse unit cell area.
+
+$\theta = n/A$
+
+•	In the case of the (\(\sqrt{2} \times \sqrt{2})R45^{\circ})\) lattice the coverage is most probably 
+
+$\theta = 1/2$				 
+
+although some independent means is needed to determine this.
+
+** Domains
+•	It is very often the case that because of symmetry of the substrate multiple orientations of the superlattice are energetically equivalent.  
+
+•	The presence of one or more domains can give two superimposed LEED patterns.  This complicates the analysis of the LEED pattern to get the reciprocal lattice.
+
+
+*** Example - (\(2 \times 1\)) overlayer on a square fcc(100) lattice.
+[[./images/domains-1.png]]
+
+*** Example - \((\sqrt{5} \times \sqrt{5})R26^{\circ})\) on square lattice.  Oxygen on Mo(100) at \theta = 0.6.
+
+[[./images/domains-2.png]]
+
+The reciprocal lattice vectors are given by:
+
+$$\vec{b}_1^* = \frac{2}{5} \vec{a}_1^* - \frac{1}{5}\vec{a}_2^*$$
+$$\vec{b}_2^* = \frac{1}{5} \vec{a}_1^* + \frac{2}{5}\vec{a}_2^*$$
+
+This gives the reciprocal lattice matrix as:
+
+#+BEGIN_SRC python
+import numpy as np
+
+Mstar = 1. / 5. * np.array([[2, -1], 
+                            [1,  2]])
+
+M = np.linalg.inv(Mstar.T)
+print M
+#+END_SRC
+
+#+RESULTS:
+: [[ 2. -1.]
+:  [ 1.  2.]]
+
+The real space lattice vectors are:
+
+[[./images/domains-3.png]]
+
 
 * Footnotes
 
