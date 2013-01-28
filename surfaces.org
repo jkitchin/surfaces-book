@@ -697,7 +697,7 @@ http://surfexp.fhi-berlin.mpg.de/
 * Computational crystallography
 In this section we show some general tools for computing crystallographic properties, such as unit cell volume, distances, distance between planes, etc... We will only consider the linear algebra approach to these problems. 
 
-First, we consider that every vector has a set of basis vectors it is associated with. For example, the vector \( 2\vec{a} + 3\vec{y} +4\vec{z} \) can be compactly represented by [2, 3, 4] with the implied cartesian vector basis set:
+First, we consider that every vector has a set of basis vectors it is associated with. For example, the vector \( 2\hat{e}_1 + 3\hat{e}_2 +4 \hat{e}_3\) can be compactly represented by [2, 3, 4] with the implied cartesian vector basis set:
 
 \begin{eqnarray}
 \hat{e}_1 = 1\vec{x} + 0\vec{y} + 0\vec{z} \\
@@ -819,12 +819,25 @@ g = np.array([[np.dot(a,a), np.dot(a,b), np.dot(a,c)],
               [np.dot(c,a), np.dot(c,b), np.dot(c,c)]])
 
 alpha = np.arccos(np.dot(B, np.dot(g, C))
-                  /(np.sqrt(np.dot(B, B)) * np.sqrt(np.dot(C, C))))*180./np.pi
+                  /(np.sqrt(np.dot(B, np.dot(g, B))) 
+                   * np.sqrt(np.dot(C, np.dot(g, C)))))*180./np.pi
+
+beta = np.arccos(np.dot(A, np.dot(g, C))
+                  /(np.sqrt(np.dot(A, np.dot(g, A))) 
+                   * np.sqrt(np.dot(C, np.dot(g, C)))))*180./np.pi
+
+gamma = np.arccos(np.dot(A, np.dot(g, B))
+                  /(np.sqrt(np.dot(A, np.dot(g, A))) 
+                   * np.sqrt(np.dot(B, np.dot(g, B)))))*180./np.pi
 
 print alpha
+print beta
+print gamma
 #+END_SRC
 
 #+RESULTS:
+: 90.0
+: 120.0
 : 90.0
 
 
@@ -858,7 +871,7 @@ print 'The angle between the vectors is {0:1.2f} degrees.'.format(theta * 180. /
 : The angle between the vectors is 86.70 degrees.
 
 ** Computing unit cell volumes
-The volume of a unit cell is particularly simple to compute from the unit cell vectors: \(V = |\det U|\) where U is the unit cell vector matrix.  We must take the absolute value because the order of vectors is arbitrary, and some orders will result in negative determinants.
+The volume of a unit cell is particularly simple to compute from the unit cell vectors: \(V = |\det U|\) where U is the unit cell vector matrix in cartesian coordinates.  We must take the absolute value because the order of vectors is arbitrary, and some orders will result in negative determinants.
 
 Let us consider a trivial example of the volume of a cube first. 
 
@@ -870,10 +883,14 @@ b = np.array([0, 5, 0])
 c = np.array([0, 0, 5])
 
 U = np.vstack([a, b, c])
+print U
 print('V = {0:1.3f} ang^3'.format(np.abs(np.linalg.det(U))))
 #+END_SRC
 
 #+RESULTS:
+: [[5 0 0]
+:  [0 5 0]
+:  [0 0 5]]
 : V = 125.000 ang^3
 
 Now,  consider the primitive lattice vectors of an fcc lattice with a lattice constant of 5 and ask what is the volume? 
@@ -893,6 +910,31 @@ print('V = {0:1.3f} ang^3'.format(np.abs(np.linalg.det(U))))
 : V = 31.250 ang^3
 
 No geometry required! Note that the volume of the primitive cell is 1/4 of the conventional cubic cell. Naturally, the primitive cell has one atom in it, whereas the conventional cell has four atoms in it.
+
+#+BEGIN_SRC python
+import numpy as np
+
+U = 5.0 * np.array([[0.5, 0.5, 0.0],
+                    [0.5, 0.0, 0.5],
+                    [0.0, 0.5, 0.5]])
+
+print('V = {0:1.3f} ang^3'.format(np.abs(np.linalg.det(U))))
+
+a = U[0]
+b = U[1]
+c = U[2]
+
+
+print np.abs(np.dot(a, np.cross(b, c)))
+print np.abs(np.dot(b, np.cross(a, c)))
+print np.abs(np.dot(c, np.cross(b, a)))
+#+END_SRC 
+
+#+RESULTS:
+: V = 31.250 ang^3
+: 31.25
+: 31.25
+: 31.25
 
 ** The reciprocal lattice in crystallography
 The reciprocal lattice is a convenient, alternative set of basis vectors that are defined by:
@@ -965,6 +1007,9 @@ print 'The spacing between the planes is {0}.'.format(spacing)
 #+END_SRC
 
 #+RESULTS:
+: [[ 0.25  0.    0.  ]
+:  [ 0.    0.25  0.  ]
+:  [ 0.    0.    0.25]]
 : The spacing between the planes is 1.41421356237.
 
 Let us consider another example, with a more complex unit cell. Find the spacing between (111) planes for the following unit cell. 
@@ -1032,6 +1077,22 @@ print a
 
 The vectors should have components that are all integers (every lattice point must be an integer linear combination of the primitive lattice vectors). There is an important note to consider about line [[(TTT)]] and that is the final transpose of the dot product. Without this, the components of the transformed vectors are in /columns/, and we have constructed everything in /rows/. In this specific case, it does not matter because the matrix is highly symmetric, and the transpose does not change it. In less symmetric cases, it can matter a lot, and it is important to keep the linear algebra in mind. The vector of the point being transformed must be a column vector, or a matrix with the components going column-wise.
 
+#+BEGIN_SRC python
+import numpy as np
+
+A = np.array([[2, 0, 0],
+              [0, 3, 0],
+              [0, 0, 4]])
+
+p = np.array([[1, 1.5, 2],
+              [2./4 , 3./4, 4./4]])
+
+print np.dot(np.linalg.inv(A.T), p.T).T
+#+END_SRC
+
+#+RESULTS:
+: [[ 0.5   0.5   0.5 ]
+:  [ 0.25  0.25  0.25]]
 
 * Low Energy Electron Diffraction (LEED)
 
@@ -1248,6 +1309,7 @@ The reciprocal lattice and therefore the LEED pattern look like
 •	Note that the reciprocal lattice is a true lattice.  It extends infinitely in both directions, is periodic, and all point are equivalent.
 
 A real LEED image of a clean Cu(111) surface looks like this:
+
 [[./images/actual-leed-image.jpg]]
 
 ** Overlayers and Superlattices
@@ -1473,6 +1535,199 @@ The real space lattice vectors are:
 
 [[./images/domains-3.png]]
 
+* Thermal desorption methods
+•	Thermal desorption methods are the most widely performed experiment in surface science to study the energetics of adsorption and the kinetics of surface reactions.
+
+•	Thermal desorption methods are also used widely in the field of catalysis and in the study of other surface processes such as adsorption into porous solids.
+
+** TPD - Reversible Adsorption / Desorption
+
+•	The measurement of desorption kinetics is usually performed using an experiment called Temperature Programmed Desorption (TPD).
+
+•	When molecules adsorb and then desorb reversibly without reacting on the surface, TPD can be used to measures the desorption energy.
+
+•	Reversible desorption basically assumes that the desorption energy is lower than any barrier to reaction and thus it is the preferred reaction channel for a molecule on a surface.
+
+[[./images/2013-01-27_1139-TPD-energy-profile.png]]
+
+•	The TPD experiment measures the rate of desorption. With some analysis, we can estimate the rate constant for desorption.  
+
+\[ k_{des} = \nu \exp \left( \frac{-\Delta E_{des}^\ddagger}{R T} \right) \]
+
+If there is no activation barrier to /adsorption/ then the barrier to desorption,\( \Delta E_{des}^\ddagger \) , is the same as the desorption energy, $\Delta E_{des}$.  In many cases the barriers to /adsorption/ are quite negligible.
+
+** TPRS – Irreversible Surface Reactions
+•	Temperature Programmed Reaction Spectroscopy (TPRS) is used to measure reaction kinetics and identify products of surface reactions other than simple desorption.
+
+•	If adsorbed molecules react rather than desorb from the surface, then it is not possible to use the TPD experiment to measure desorption energies.  This occurs when the barriers to reaction are lower than the barriers to desorption.
+
+[[./images/2013-01-27_1144-TPRS.png]]
+
+•	Many adsorbed molecules do react and it is possible that one can detect the desorption of products from the surface.  This can provide both an identification of the reaction products and a measure of the barrier to surface reaction $\Delta E_a$.
+
+** TPD Experiment
+•	The typical TPD experiment is performed in four steps.
+
+  1.	Surface preparation
+  2.	Adsorption of species at T0.
+  3.	Heating of surface at constant rate, T = T_0 + \beta t.
+  4.	Detection of desorbing species by mass spectrometry.
+
+[[./images/2013-01-27_1146-TPD-expt.png]]
+
+•	The TPD experiment is performed in a vacuum so that the mass spectrometer can operate.  If one does not use a mass spectrometer as a detector the experiment can also be done in flowing gas.
+
+•	The mass spectrometer is tuned to the mass or masses of species that are desorbing from the surface and measures a signal versus time (or temperature).  The signal that is measured by the mass spectrometer is proportional to the partial pressure of the desorbing material which in turn is proportional to the desorption rate (provided that the desorbing species are being pumped away rapidly.)
+
+ $signal(T) \propto P(T) \propto r(T)$
+
+•	The rate of desorption is defined as the change in coverage with respect to time.
+
+\[ r = -\frac{d\theta}{dt} = - \beta  \frac{d\theta}{dT} \]
+
+•	For most process one thinks about the desorption rate simply as a reaction which can be zero-, first-, or second-order in the reactant concentration.
+
+\[ r = k \cdot \theta^n \]
+
+•	One can think about the desorption experiment physically.  
+ -	Initially one has a high coverage $\theta_0$ of adsorbates but the rate constant k(T_0) is very low.  Thus the desorption rate is low.
+ -	As the temperature increases the rate constant increases and thus the desorption rate increases.
+ -	Because desorption is occurring the coverage drops.  At some temperature the rate of desorption passes through a maximum and then drops back to zero.
+
+[[./images/2013-01-27_1149-tpd-example.png]]
+
+•	The most common form of desorption is for a first-order process.  This is what one would expect for a molecule that simply adsorbs and then desorbs from the surface.
+
+•	Zero-order desorption can occur for thick films which in essence sublime from the surface.
+
+•	Second-order desorption occurs in cases where molecules adsorb dissociatively but then recombine in order to desorb.  (H2,g → 2Had → H2,g).
+
+**  Analysis of First-Order Desorption Kinetics
+
+
+
+•	We will solve for the peak desorption temperature for a first-order desorption process.  This can be used to determine the desorption energy.
+
+•	Begin with the definition of the desorption rate as
+
+\[ r_d = -\frac{d\theta}{dt} = k \theta = \nu \exp \left( \frac{E_d}{R T} \theta \right ) \]
+
+•	In terms of temperature we have 
+
+\[  -\frac{d\theta}{dT} = \frac{\nu}{\beta} \exp \left( \frac{E_d}{R T} \theta \right ) \]
+
+•	The maximum in the desorption rate is defined by the expression
+
+\[ \frac{d r_d}{dT}|_{T_p} = 0 \]
+
+•	This can be evaluated using the form of the expression for the desorption rate.
+
+\[ -\frac{d r_d}{dT} = \nu \left[ \exp \left(\frac{-E_d}{R T} \right) \frac{d\theta}{dT} + \frac{E_d}{R T^2} \exp \left ( \frac{-E_d}{R T} \right ) \theta \right ] \]
+
+At the peak desorption temperature this is equal to zero and gives
+
+\[ \frac{E_d}{R T_p^2} \theta_p = -\frac{d\theta}{dT} \Bigr\rvert_{T_p} \]
+
+which leads to this final equation relating the peak temperature, desorption barrier and pre-exponential factor. 
+
+\[ \frac{E_d}{R T_p^2} - \frac{\nu}{\beta} \exp \left ( \frac{E_d}{R T_p} \right ) \]
+
+Which must be solved numerically. Note we have a single equation, and two unknowns: $E_d$ and $\nu$. 
+
+•	In order to solve for E_d from a single measured value of T_p one must estimate the value of the pre-exponent.  Formally this comes from transition state theory and can be given by the expression:
+
+\[ \nu = \left ( \frac{k_b T}{h} \frac{q_\ddagger}{q_A} \right )\]
+
+The values of q are the partition functions for the adsorbed species (qA) and for the transition state for desorption (q‡).  In many instances these roughly cancel out and one can assume that the pre-exponent is given by
+
+\[ \nu \approx \left ( \frac{k_b T}{h} \right ) \approx 10^{13} \sec^{-1}\]
+
+•	One can estimate the values of Ed and v independently if one measures the desorption profiles over a range of different heating rates.  The peak desorption temperature will depend upon the heating rate and increases for faster heating rates.
+
+•	Examining the expression for the relationship between desorption energy and peak temperature gives the following.
+
+\begin{eqnarray}
+\frac{E_d}{R T_p^2} &=& \frac{\nu}{\beta} \exp \left ( \frac{-E_d}{R T_p} \right )\\
+\frac{\beta}{T_p^2} &=& \frac{\nu R}{E_d} \exp \left ( \frac{-E_d}{R T_p} \right ) \\
+\ln \left ( \frac{\beta}{T_p^2} \right ) &=& \ln \left ( \frac{\nu R}{E_d}\right ) - \frac{E_d}{R T_p}
+\end{eqnarray}
+
+If one obtains $T_p$ for various different heating rates and then plots 
+
+$\ln \left(\frac{\beta}{T_p^2} \right )$ vs $\frac{1}{T_p}$
+			 
+
+this will yield a straight line of slope E_d/R and the intercept contains information about the preexponential factor.
+
+*** Examples of first-order desorption curves.
+
+•	The plot is for heptane adsorbed on a graphite surface.  The desorption is first order and reversible.  Note that the peak desorption temperature is independent of coverage.  Once the monolayer desorbs one has desorption from the multilayer which occurs at lower temperatures.
+
+•	The second plot shows the desorption of heptane from graphite using variable heating rates.  Note that the desorption temperature increases with increasing heating rate.  This can be used to determine the desorption energy independent of the pre-exponent.
+
+[[./images/2013-01-28_1019-first-order-tpd.png]]
+
+•	The third plot shows the desorption peaks for alkanes of increasing chain length.  Clearly the temperature increases roughly linearly with the chain length and indicates that the alkanes adsorb with desorption energies that increase linearly with chain length.
+
+•	The fourth plot is actually a TPRS curve for a reaction of isopropanoxides that produce acetaldehydes that desorb from the surface during heating.
+
+[[./images/2013-01-28_1021-first-order-tpd2.png]]
+
+** Zero order Desorption Kinetics 
+•	Zero-order desorption kinetics are described by an equation of the form
+
+ \[ r = k \theta ^0 = \nu \exp \left ( \frac{E_d}{R T} \right ) \]
+
+•	Zero-order desorption kinetics usually occur under conditions where the concentration of species at the surface does not change during the desorption process.  As an example, consider the sublimation of a solid or of a thin film.  The desorption of one molecule from the surface merely exposes a molecule in the next layer for desorption.
+
+[[./images/2013-01-28_1022-zero-order-sublimation.png]]
+
+•	During a TPD experiment one measures the desorption rate directly.  Because there is no coverage dependence, the TPD curve is directly proportional to the desorption rate constant plotted versus temperature.
+
+[[./images/2013-01-28_1023-zero-order-tpd.png]]
+
+•	During a zero-order desorption process the desorption rate continues to increase with temperature until all the adsorbate has been removed from the surface.  At that temperature the desorption rate drops to zero.
+
+•	The area under the desorption curve is proportional to the amount of material on the surface initially.  As a result increasing the coverage on the surface simple causes the peak temperatures to increase.  At low temperatures the curves all overlap one another because the desorption rate is just proportional to the desorption rate constant.
+
+[[./images/2013-01-28_1023-zero-order-tpd-2.png]]
+
+** TODO Second-Order Desorption Kinetics
+•	Second order desorption usually describes recombinative desorption of adsorbates such as H_2, O_2, N_2, etc...
+
+•	The desorption rate will be second-order if the desorption of the molecule is fast with respect to the recombination rate.
+
+$ insert math here$
+
+•	Second order desorption kinetics can be analyzed in much the same way as first order kinetics to give a relationship between the peak desorption temperature, $T_p$, and the desorption energy, $E_d$.
+
+\begin{eqnarray}
+r_d &=& k \theta^2 \\
+    &=& -\beta \frac{d\theta}{dT} \\
+TODO: much more to add
+\end{eqnarray}
+
+•	Note that the relationship between the peak temperature and the desorption energy now depends on the coverage of the adsorbate.
+
+•	The second order desorption peak is symmetric about the peak and so it is easy to show that
+
+ $\theta_p = \frac{1}{2} \theta_0$
+
+and as a consequence that the relationship between the peak desorption temperature and the desorption energy depends on the initial coverage on the surface.
+
+\[ \left ( \frac{-E_{des}}{R T_p^2} \right ) = \frac{\nu}{\beta} \theta_0 \exp \left ( \frac{E_{des}}{R T_p^2} \right ) \]
+
+** Assumptions in TPD Analysis
+
+•	There are several assumptions that go into the analysis of the TPD spectra that must be recognized.
+
+•	/Equilibrium/.  It is assumed that the molecules on the surface reach their equilibrium state and thus that the desorption energy that is measured represent a true thermodynamic property of the system.  Because the system is heated slowly during the process it is fairly easy for the system to reach equilibrium but not always the case.
+
+•	/Pre-exponent/.  It is often the case that it is difficult to get good data for the variable heating rate experiment and that one has to then analyze the data under the assumption that the pre-exponent is 10^{13} sec^{-1}.  This is a rough estimate but the important thing is that the measured desorption energy is not very sensitive to errors in this value.  One order of magnitude error in v will only change Edes by ~5%.
+
+•	/Coverage dependent desorption energy/.  The assumption is that there is one value of E_{des} in the experiment.  Often there can be repulsive interactions between the adsorbates that result in an increase in the E_{des} as the molecules desorb from the surface.
+
+[[./ insert tpd3 here
 
 * Footnotes
 
