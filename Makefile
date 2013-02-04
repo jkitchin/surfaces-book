@@ -24,3 +24,11 @@ pdf: tex $(PDFIMAGES)
 
 clean:
 	rm -f *.aux *.log *.dvi *.blg *.bbl *.toc *~ *.out *.idx *.ilg *.ind *.lof *.lot *.css *.idv *.lg *.tmp *.xref *.4ct *.4tc
+
+hwk:
+	echo running with $(ARG)
+	rm -f $(ARG).tex $(ARG).pdf $(ARG)_flymake.tex $(ARG).pyg
+	$(BATCH_EMACS)  --eval '(setq enable-local-variables :all)' \
+	          --visit=$(ARG).org \
+	          --execute="(setq org-export-exclude-tags '(\"solution\"))"  \
+	          -f org-export-as-latex

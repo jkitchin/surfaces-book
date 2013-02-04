@@ -1131,7 +1131,7 @@ This gives the wavelength in \AA for kinetic energy in eV.
 
 [[./images/3-3-diffraction.png]]
 
-•	Diffraction occurs when the distances traveled by the scattered plane waves all differ by some integral multiple of the wavelength. A wave with wavelength \lambda is incident on a 1D lattice with spacing $a$ at an angle \phi_0.  
+•	Diffraction occurs when the distances traveled by the scattered plane waves all differ by some integral multiple of the wavelength. A wave with wavelength \lambda is incident on a 1D lattice with spacing $a$ at an angle $\phi_0$.  
 
 [[./images/3-4-diffraction-angles.png]]
 
@@ -1156,10 +1156,11 @@ Consider the 2D diffraction problem from a lattice with vectors $\vec{a}_1$  and
 
 •	Now the diffraction conditions are given by
 
-		$$\vec{a}_1 \cdot (\hat {s}_{hk} - \hat{s}_0) = h \lambda$$		 
+		\[ \vec{a}_1 \cdot (\hat {s}_{hk} - \hat{s}_0) = h \lambda \]		 
 
 		and
- 		$$\vec{a}_2 \cdot (\hat {s}_{hk} - \hat{s}_0) = k \lambda$$.
+
+ 		\( \vec{a}_2 \cdot (\hat {s}_{hk} - \hat{s}_0) = k \lambda \).
 
 Both must be satisfied in order to get diffraction
 
@@ -1174,7 +1175,7 @@ For any lattice vectors, $(\vec{a}_1, \vec{a}_2)$, we can define a new set of ve
 
 $$\hat{s} - \hat{s}_0 = h \lambda \vec{a}_1^* - k \lambda \vec{a}_2^*$$.
 
-Let us consider a general approach to computing the reciprocal lattice. First, we consider how to represent the vectors in the form of a matrix. For the two lattice vectors $\vec{a}_1$ and $\vec{a}_2$, we express them in a matrix as: $A = [\vec{a}_1 \vec{a}_2]$. We next consider the reciprocal lattice vectors, $A^* = \left[ \begin{array}{c}  \vec{a}_1^* \\ \vec{a}_2^* \end{array}\right]$ Now, we have the following equation: $A \cdot A^* = I$, where $I$ is the identity matrix. We can readily solve for the reciprocal lattice vectors as $A^* = I \cdot A^{-1} = A^{-1}$.
+Let us consider a general approach to computing the reciprocal lattice. First, we consider how to represent the vectors in the form of a matrix. For the two lattice vectors $\vec{a}_1$ and $\vec{a}_2$, we express them in a matrix as: $A = \left [ \begin{array}{c} \vec{a}_1 \\ \vec{a}_2\end{array} \right ]$. We next consider the reciprocal lattice vectors in the columnwise matrix, $A^* = \left[ \begin{array}{c}  \vec{a}_1^* \\ \vec{a}_2^* \end{array}\right]$ Now, we have the following equation: $A \cdot A^{*T} = I$, where $I$ is the identity matrix. We can readily solve for the reciprocal lattice vectors as $A^* = (I \cdot A^{-1})^T = (A^{-1})^T$.
 
 Let us consider a specific example where $a_1 = 1x + 0y$ and $a_2 = 0x + 2y$.
 
@@ -1187,9 +1188,9 @@ a2 = [0, 2]
 A = np.vstack([a1, a2])   #(ref:vstack)
 print('A = \n{0}'.format(A))
 
-Astar = np.linalg.inv(A)    #(ref:invc)
+Astar = np.linalg.inv(A).T    #(ref:invc)
 
-a1star= Astar[0]            #(ref:a1*)
+a1star= Astar[0]            #(ref:a1star)
 a2star = Astar[1]
 print 'a1* = {0}'.format(a1star)
 print 'a2* = {0}'.format(a2star)
@@ -1206,7 +1207,7 @@ print np.dot(a2, a2star)
 : [[1 0]
 :  [0 2]]
 : a1* = [ 1.  0.]
-: a1* = [ 0.   0.5]
+: a2* = [ 0.   0.5]
 : 1.0
 : 0.0
 : 0.0
@@ -1216,24 +1217,24 @@ This method works generally for 2 and 3 dimensional lattices. Some notes about t
 1. In line [[(a1)]] we represent the components of the vector as a /list/.
 2. In line [[(vstack)]] we create an array by using numpy.vstack. This makes the columns of the array the components of the vector. An array is not the same as a matrix!
 3. In line [[(invc)]] we calculate the inverse of the array. Note that now the components of the reciprocal lattice vectors are in the /rows/ of the resulting array.
-4. In line [[(a1*)]] we use indexing to extract the first row. In Python, indexing starts at 0.
+4. In line [[(a1star)]] we use indexing to extract the first row. In Python, indexing starts at 0.
 5. In line [[(dot)]] we must use the numpy.dot function to get the matrix multiplication, or dot product of the two vectors. The * operator will perform element-wise multiplication.
 
 
 
 ** The LEED Pattern
 
-•	It will turn out that the LEED pattern is actually an image of the reciprocal lattice.
+- It will turn out that the LEED pattern is actually an image of the reciprocal lattice.
 
-•	Interpretation of the LEED pattern requires transforming the image of the reciprocal lattice back into the real lattice.
+- Interpretation of the LEED pattern requires transforming the image of the reciprocal lattice back into the real lattice.
 
 *** Ewald Sphere
 
-•	At the crystal surface there is a lattice of real atoms and a reciprocal lattice.
+-	At the crystal surface there is a lattice of real atoms and a reciprocal lattice.
 
-•	Define an origin for the reciprocal lattice and then imagine a set of rods drawn perpendicular to the surface through the reciprocal lattice points. 
+-	Define an origin for the reciprocal lattice and then imagine a set of rods drawn perpendicular to the surface through the reciprocal lattice points. 
 
-•	Finally, draw a sphere of radius $r=\frac{1}{\lambda}$   over the lattice centered at a point $\frac{-\hat{s}_0}{\lambda}$  from the origin of the reciprocal lattice.
+-	Finally, draw a sphere of radius $r=\frac{1}{\lambda}$   over the lattice centered at a point $\frac{-\hat{s}_0}{\lambda}$  from the origin of the reciprocal lattice.
 
 [[./images/3-8-ewald.png]]
 
@@ -1326,7 +1327,7 @@ A real LEED image of a clean Cu(111) surface looks like this:
 
 •	Adsorbed atoms also produce ordered overlayers with lattice parameters different from those of the substrate.
 
-#+caption: p(2x1) overlayer on a square lattice.
+#+caption: p(2 \times 1) overlayer on a square lattice.
 #+ATTR_LaTeX: placement=[H]
 [[./images/3-10-overlayer.png]]
 
@@ -1343,7 +1344,7 @@ and the angle between the vectors is $\varphi$, then the notation for the overla
 
 		$(x \times y)R\varphi$.
 
-#+caption: Example of p(2 \times 2)on a square lattice.
+#+caption: Example of p(2 \times 2) on a square lattice.
 #+ATTR_LaTeX: placement=[H]
 [[./images/3-11-p-2x2.png]]
 
@@ -1369,7 +1370,7 @@ and the angle between the vectors is $\varphi$, then the notation for the overla
 
 •	The overlayer can then be denoted by a simple matrix which transforms the overlayer lattice into the substrate lattice.
 
-$$\left ( \begin{array}{c}\vec{b}_1 \\ \vec{b}_2 \end{array} \right ) = \left [ \begin{array}{cc} m_{11} m_{12} \\ m_{21} m_{22} \end{array} \right] \left ( \begin{array}{c}\vec{a}_1 \\ \vec{a}_2 \end{array} \right ) = \underline{\underline{M}}   \left ( \begin{array}{c}\vec{a}_1 \\ \vec{a}_2 \end{array} \right )$$
+$$\left ( \begin{array}{c}\vec{b}_1 \\ \vec{b}_2 \end{array} \right ) = \left [ \begin{array}{cc} m_{11} & m_{12} \\ m_{21} & m_{22} \end{array} \right] \left ( \begin{array}{c}\vec{a}_1 \\ \vec{a}_2 \end{array} \right ) = \underline{\underline{M}}   \left ( \begin{array}{c}\vec{a}_1 \\ \vec{a}_2 \end{array} \right )$$
 
 
 #+caption: Example of a lattice with a structure requiring matrix notation.
@@ -1438,7 +1439,7 @@ Here is what an actual LEED pattern looks like for a clean surface of Cu(111) an
 ** General Reciprocal Space to Real Space Conversion
 •	There is a general means for converting a reciprocal lattice into a real space lattice.
 
-•	The usual type of problem is one in which the substrate lattice (1x1) is known and what one is trying to do is to determine the unit cell of the overlayer in terms of the substrate lattice vectors.
+•	The usual type of problem is one in which the substrate lattice (1 \times 1) is known and what one is trying to do is to determine the unit cell of the overlayer in terms of the substrate lattice vectors.
 
 •	Basically the problem is to find  M, the matrix which relates the overlayer lattice to the surface lattice.
 
@@ -1453,11 +1454,11 @@ $$\vec{b}_2^* = \frac{1}{2} \vec{a}_1^* - \frac{1}{2} \vec{a}_2^*$$
 
 •	Find the reciprocal space overlayer matrix.
 
-$$M* = \frac{1}{2} \left [\begin{array}{cc} 1 & 1 \\ 1 & -1 \end{array} \right ]$$
+$$M^* = \frac{1}{2} \left [\begin{array}{cc} 1 & 1 \\ 1 & -1 \end{array} \right ]$$
 
 •	Find the real space overlayer matrix from the reciprocal space overlayer matrix.
 
-$M = [(M*)^T]^{-1}$
+$M = [(M^*)^T]^{-1}$
 
 •	Use the real space matrix to find the unit cell of the overlayer lattice.
 
@@ -1485,23 +1486,22 @@ print M
 
 •	In terms of the area of the substrate lattice the superlattice area is
 
-$area = | \vec{b}_1 \times \vec{b}_2$ |
+$area = \lvert \vec{b}_1 \times \vec{b}_2 \rvert$
 
 •	The coverage of the adsorbate must be some multiple of the inverse unit cell area.
 
 $\theta = n/A$
 
-•	In the case of the (\(\sqrt{2} \times \sqrt{2})R45^{\circ})\) lattice the coverage is most probably 
+•	In the case of the (\(\sqrt{2} \times \sqrt{2})R45^{\circ}\) lattice the coverage is most probably 
 
 $\theta = 1/2$				 
 
 although some independent means is needed to determine this.
 
 ** Domains
-•	It is very often the case that because of symmetry of the substrate multiple orientations of the superlattice are energetically equivalent.  
+-	It is very often the case that because of symmetry of the substrate multiple orientations of the superlattice are energetically equivalent.  
 
-•	The presence of one or more domains can give two superimposed LEED patterns.  This complicates the analysis of the LEED pattern to get the reciprocal lattice.
-
+-	The presence of one or more domains can give two superimposed LEED patterns.  This complicates the analysis of the LEED pattern to get the reciprocal lattice.
 
 *** Example - (\(2 \times 1\)) overlayer on a square fcc(100) lattice.
 [[./images/domains-1.png]]

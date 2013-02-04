@@ -48,7 +48,8 @@ Your course grade will be primarily determined by your performance on problem se
 | Problem sets      |  30 |
 | Quizzes           |  30 |
 | Literature review |  20 |
-| review            |  20 |
+| Course project    |  20 |
+|-------------------+-----|
 |                   | 100 |
 #+TBLFM: @>$2=vsum(@2..@-1)
 
@@ -103,21 +104,26 @@ At the end of the semester I will calculate what fraction of the possible points
 
 ** Course schedule
 *** DONE [2013-01-14 Mon]
-*** [2013-01-16 Wed]
-*** [2013-01-21 Mon] MLK Day, NO CLASS
-*** [2013-01-23 Wed]
-*** [2013-01-28 Mon]
-*** [2013-01-30 Wed]
-*** [2013-02-04 Mon]
-*** [2013-02-06 Wed]
-*** [2013-02-11 Mon]
-*** [2013-02-13 Wed]
-*** [2013-02-18 Mon]
-*** [2013-02-20 Wed]
-*** [2013-02-25 Mon]
-*** [2013-02-27 Wed]
-*** [2013-03-04 Mon]
-*** [2013-03-06 Wed]
+*** DONE [2013-01-16 Wed]
+    CLOSED: [2013-02-04 Mon 09:20]
+*** DONE [2013-01-21 Mon] MLK Day, NO CLASS
+    CLOSED: [2013-02-04 Mon 09:20]
+*** DONE [2013-01-23 Wed]
+    CLOSED: [2013-02-04 Mon 09:20]
+*** DONE [2013-01-28 Mon]
+    CLOSED: [2013-02-04 Mon 09:20]
+*** DONE [2013-01-30 Wed]
+    CLOSED: [2013-02-04 Mon 09:20]
+*** [2013-02-04 Mon] AES/XPS
+*** [2013-02-06 Wed] SEM/TEM
+*** [2013-02-11 Mon] Vibrational spectroscopy
+*** [2013-02-13 Wed] Adsorption kinetics
+*** [2013-02-18 Mon] Equilibrium adsorption
+*** [2013-02-20 Wed] Thermal desorption
+*** [2013-02-25 Mon] Tentative tour of Gellman surface science lab
+*** [2013-02-27 Wed] Tentative tour of MSE microscopy lab
+*** [2013-03-04 Mon] Literature Review presentations
+*** [2013-03-06 Wed] Literature Review presentations
 *** [2013-03-11 Mon] SPRING BREAK, NO CLASS
 *** [2013-03-13 Wed] SPRING BREAK, NO CLASS
 *** [2013-03-18 Mon]
@@ -130,7 +136,7 @@ At the end of the semester I will calculate what fraction of the possible points
 *** [2013-04-10 Wed]
 *** [2013-04-15 Mon]
 *** [2013-04-17 Wed]
-*** [2013-04-22 Mon]
-*** [2013-04-24 Wed]
-*** [2013-04-29 Mon]
-*** [2013-05-01 Wed]
+*** [2013-04-22 Mon] Guest lecture on Biosurfaces (tentative)
+*** [2013-04-24 Wed] Guest lecture on Zetaspin (tentative)
+*** [2013-04-29 Mon] Final project presentations
+*** [2013-05-01 Wed] Final project presentations

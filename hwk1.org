@@ -1,0 +1,71 @@
+#+TITLE:     hwk1.org
+#+AUTHOR:    John Kitchin
+#+EMAIL:     johnrkitchin@gmail.com
+#+DATE:      2013-02-04 Mon
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+
+* Compute the distance between the (111) planes of Ag.
+Use the experimental lattice constant of Ag.
+
+* Angles and distances
+Compute the length of the vector indicated by D, and the angle indicated by A. You can assume the unit cell is a cube with length of 3.6 nm on each side.
+
+[[./images/hwk1-cube.png]]
+
+* Coordinate system transformations
+
+The unit cell of a material is given by:
+#+BEGIN_example
+     4.2266540199664249    0.0000000000000000    0.0000000000000000
+     0.0000000000000000    4.2266540199664249    0.0000000000000000
+     0.0000000000000000    0.0000000000000000    2.6888359272289208
+#+END_example
+
+The coordinates of the atoms in the unit cell are given in fractional coordinates as:
+#+BEGIN_example
+  0.0000000000000000  0.0000000000000000  0.0000000000000000
+  0.5000000000000000  0.5000000000000000  0.5000000000000000
+  0.3067891334429594  0.3067891334429594  0.0000000000000000
+  0.6932108665570406  0.6932108665570406  0.0000000000000000
+  0.1932108665570406  0.8067891334429594  0.5000000000000000
+  0.8067891334429594  0.1932108665570406  0.5000000000000000
+#+END_example
+
+Compute the Cartesian coordinates of each atom.
+
+* Computing unit cell parameters
+For the following unit cell (in rows), compute the length of each vector, and the angle between the vectors, e.g. the "a b c \alpha \beta \gamma" representation. 
+
+#+BEGIN_example
+3.817	-0.011	-0.243
+-0.011	3.817	-0.243
+-1.519	-1.519	4.986
+#+END_example
+
+* Computing fractional coordinates
+Given this unit cell (in rows)
+#+BEGIN_example
+3.817	-0.011	-0.243
+-0.011	3.817	-0.243
+-1.519	-1.519	4.986
+#+END_example
+
+And atoms at these cartesian coordinates:
+
+#+BEGIN_EXAMPLE
+ [[ 1.23141,   0.239958,  3.102345]
+  [ 1.05559,   2.047042,  1.397655]
+  [-0.626458,  2.21009,   3.890655]
+  [ 2.913458,  0.07691,   0.609345]
+  [ 1.004314,  0.139186,  1.125   ]
+  [ 1.282686,  2.147814,  3.375   ]]
+#+END_EXAMPLE
+
+Compute the fractional coordinates of each atom in the unit cell.
+
+
