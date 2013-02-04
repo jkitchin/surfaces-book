@@ -1,4 +1,4 @@
-#+TITLE:     hwk1.org
+#+TITLE:     Homework 1 - Due 2/13/2013
 #+AUTHOR:    John Kitchin
 #+EMAIL:     johnrkitchin@gmail.com
 #+DATE:      2013-02-04 Mon
