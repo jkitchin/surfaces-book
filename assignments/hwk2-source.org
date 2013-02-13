@@ -1,0 +1,32 @@
+#+TITLE:     Homework 2 - Due 2/20/2013
+#+AUTHOR:    John Kitchin
+#+EMAIL:     johnrkitchin@gmail.com
+#+DATE:      2013-02-13 Mon
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+
+* Calculate the number of atoms/cm^{2} in the following surfaces:
+
+  a) FCC(100) Cu, Pt
+
+  b) FCC(111) Cu, Pt
+
+  c) BCC(100) Mo,W
+
+  d) BCC(110) Mo, W
+
+* In the following image the large blue circles are the surface metal atoms and the small black circles represent adsorbates.
+
+[[./images/hwk2-leed.png]]
+
+  a) Give an example of what surface the large circles could represent.
+
+  b) Describe the overlayer in each case using matrix notation. If possible, also express the overlayer using Wood's notation.
+
+  c) Calculate the reciprocal lattice vectors for each case.
+
+  d) Sketch the LEED pattern you expect for these two surfaces.
