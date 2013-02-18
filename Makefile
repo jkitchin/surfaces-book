@@ -28,7 +28,6 @@ clean:
 hwk:
 	echo running with $(ARG)
 	rm -f $(ARG).tex $(ARG).pdf $(ARG)_flymake.tex $(ARG).pyg
-	$(BATCH_EMACS)  --eval '(setq enable-local-variables :all)' \
-	          --visit=$(ARG).org \
-	          --execute="(setq org-export-exclude-tags '(\"solution\"))"  \
-	          -f org-export-as-latex
+	$(BATCH_EMACS)  $(ARG).org \
+	                --execute="(setq org-export-exclude-tags '(\"solution\"))"  \
+	                -f org-export-as-org

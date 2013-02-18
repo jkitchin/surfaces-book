@@ -16,7 +16,7 @@
 
 The current version of this syllabus will always be at https://github.com/jkitchin/surfaces-book/syllabus
 
-* Instructors
+Instructors
 Professor John Kitchin
 DH A207F
 412-269-7803
@@ -114,9 +114,12 @@ At the end of the semester I will calculate what fraction of the possible points
     CLOSED: [2013-02-04 Mon 09:20]
 *** DONE [2013-01-30 Wed]
     CLOSED: [2013-02-04 Mon 09:20]
-*** [2013-02-04 Mon] AES/XPS
-*** [2013-02-06 Wed] SEM/TEM
-*** [2013-02-11 Mon] Vibrational spectroscopy
+*** DONE [2013-02-04 Mon] AES/XPS
+    CLOSED: [2013-02-13 Wed 10:38]
+*** DONE [2013-02-06 Wed] SEM/TEM
+    CLOSED: [2013-02-13 Wed 10:38]
+*** DONE [2013-02-11 Mon] Vibrational spectroscopy
+    CLOSED: [2013-02-18 Mon 09:40]
 *** [2013-02-13 Wed] Adsorption kinetics
 *** [2013-02-18 Mon] Equilibrium adsorption
 *** [2013-02-20 Wed] Thermal desorption

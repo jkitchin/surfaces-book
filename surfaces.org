@@ -1729,6 +1729,183 @@ and as a consequence that the relationship between the peak desorption temperatu
 
 [[./ insert tpd3 here
 
+* Worked examples
+** Analysis of XPS spectra
+XPS data
+#+BEGIN_SRC python
+import numpy as np
+import matplotlib.pyplot as plt
+
+E, C = np.loadtxt('data/Cu-clean-full.txt', skiprows=5, unpack=True)
+plt.plot(E,C)
+plt.xlabel('Energy (eV)')
+plt.ylabel('Intensity (counts)')
+plt.title('Full XPS scan of clean Cu')
+adict = dict(arrowstyle="->",
+             connectionstyle="angle,angleA=0,angleB=90,rad=10")
+plt.annotate('Cu 2s', (1096, 115000), (1096,300000), arrowprops=adict)
+plt.annotate('Cu 2p$_{1/2}$', (952.20, 201000), (952.2, 325000), arrowprops=adict)
+#plt.annotate('Cu 2p', (942.42, 0), (942.42, 225000), arrowprops=adict)
+plt.annotate('Cu 2p$_{3/2}$', (932.67, 300000), (932.67, 325000), arrowprops=adict, ha='right')
+
+plt.annotate('O 1s', (532, 8000), (532, 250000), arrowprops=adict)
+
+plt.savefig('images/XPS-Cu-clean-full.png')
+plt.show()
+#+END_SRC
+
+#+RESULTS:
+
+[[./images/XPS-Cu-clean-full.png]]
+
+#+BEGIN_SRC python
+import numpy as np
+import matplotlib.pyplot as plt
+
+E, C = np.loadtxt('data/Cu-clean-region1.txt', skiprows=5, unpack=True)
+plt.plot(E,C)
+plt.xlabel('Energy (eV)')
+plt.ylabel('Intensity (counts)')
+plt.savefig('images/XPS-Cu-clean-region1.png')
+#+END_SRC
+
+#+RESULTS:
+
+[[./images/XPS-Cu-clean-region1.png]]
+
+#+BEGIN_SRC python
+import numpy as np
+import matplotlib.pyplot as plt
+
+E, C = np.loadtxt('data/Cu-clean-region2.txt', skiprows=5, unpack=True)
+plt.plot(E,C)
+plt.xlabel('Energy (eV)')
+plt.ylabel('Intensity (counts)')
+plt.savefig('images/XPS-Cu-clean-region2.png')
+#+END_SRC
+
+#+RESULTS:
+
+[[./images/XPS-Cu-clean-region2.png]]
+
+There is only a trace amount of oxygen present in this spectrum.
+
+After exposing the surface to 30 L of oxygen,
+
+#+BEGIN_SRC python
+import numpy as np
+import matplotlib.pyplot as plt
+
+E, C = np.loadtxt('data/Cu-O-30L-region1.txt', skiprows=5, unpack=True)
+plt.plot(E,C)
+plt.xlabel('Energy (eV)')
+plt.ylabel('Intensity (counts)')
+plt.savefig('images/XPS-Cu-O-30L-region1.png')
+#+END_SRC
+
+#+RESULTS:
+
+[[./images/XPS-Cu-O-30L-region1.png]]
+
+We need to integrate the areas under these curves to quantify the amount of Cu present.
+
+#+BEGIN_SRC python
+import numpy as np
+import matplotlib.pyplot as plt
+
+E, C = np.loadtxt('data/Cu-O-30L-region1.txt', skiprows=5, unpack=True)
+
+# peak 1  
+ind = E < 938
+
+E1 = E[ind]
+C1 = C[ind]
+
+bg = (E1 < 927) | (E1 > 936)
+
+pb = np.polyfit(E1[bg], C1[bg], 3)
+bgfit = np.polyval(pb, E1)
+
+
+plt.plot(E1, C1)
+plt.plot(E1[bg], C1[bg], 'g. ')
+plt.plot(E1, bgfit, 'g-')
+plt.savefig('images/XPS-Cu-O-bg-1.png')
+
+I1 = -np.trapz(C1, E1)
+Ib = -np.trapz(bgfit, E1)
+
+A1 = I1 - Ib
+print A1
+#+END_SRC
+
+#+RESULTS:
+: 1049187.85313
+
+[[./images/XPS-Cu-O-bg-1.png]]
+#+BEGIN_SRC python
+import numpy as np
+import matplotlib.pyplot as plt
+
+E, C = np.loadtxt('data/Cu-O-30L-region2.txt', skiprows=5, unpack=True)
+plt.plot(E,C)
+plt.xlabel('Energy (eV)')
+plt.ylabel('Intensity (counts)')
+plt.savefig('images/XPS-Cu-O-30L-region2.png')
+#+END_SRC
+
+#+RESULTS:
+
+[[./images/XPS-Cu-O-30L-region2.png]]
+
+We need to integrate the area under this curve to quantify the oxygen. There is obviously a background we do not want to consider. Let us consider how to subtract it out. We say the peak is between 524 and 533 eV, and we will fit a function to the region outside it, e.g. a third order polynomial. Then, we can simply integrate the data, and the background, and take the difference. 
+
+#+BEGIN_SRC python
+import numpy as np
+import matplotlib.pyplot as plt
+
+E, C = np.loadtxt('data/Cu-O-30L-region2.txt', skiprows=5, unpack=True)
+
+ind = (E < 524) | (E > 533) # | is a logical "or"
+
+Eb = E[ind]
+Cb = C[ind]
+
+pb = np.polyfit(Eb, Cb, 3)
+Cbfit = np.polyval(pb, E)
+
+plt.plot(E, C, label='data')
+plt.plot(E[ind], C[ind], 'g. ', label='region defining background')
+plt.plot(E, Cbfit, label='fitted background')
+plt.legend(loc='best')
+plt.savefig('images/XPS-Cu-O-peak-area.png')
+
+I1 = -np.trapz(C, E)      # Note energies are decreasing in datafile so we take the negative
+Ib = -np.trapz(Cbfit, E)
+
+print 'The area under the curve is {0}'.format(I1 - Ib)
+#+END_SRC
+
+#+RESULTS:
+: The area under the curve is 50387.3806319
+
+[[./images/XPS-Cu-O-peak-area.png]]
+
+
+Finally to get atomic percent:
+
+#+BEGIN_SRC python :results output
+A_Cu = 1049187.85313
+A_O = 50387.3806319
+
+s_Cu = 4.2
+s_O = 2.1
+print (A_O / s_O) / (A_O / s_O + A_Cu / s_Cu)
+#+END_SRC
+
+#+RESULTS:
+: 0.0876330760691
+
 * Footnotes
 
 [fn:1] We have to import the numpy library. Here we import it with the name np, and then access the functions using a dot notation. For example, the sqrt function is np.sqrt.
@@ -1736,7 +1913,6 @@ and as a consequence that the relationship between the peak desorption temperatu
 [fn:2] Read this equation as the (x,y,z) coordinates of the i^{th} atom of type m for every atom $i$ in the structure $I$.
 
 [fn:3] http://en.wikipedia.org/wiki/Least_common_multiple#Computing_the_least_common_multiple
-
 
 
 * References
