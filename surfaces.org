@@ -1731,13 +1731,16 @@ and as a consequence that the relationship between the peak desorption temperatu
 
 * Worked examples
 ** Analysis of XPS spectra
-XPS data
+
+In this example, we examine XPS spectra for a clean Cu surface, and one that has been exposed to 30L of oxygen. Our objective is to calculate the atomic % of O on the surface. First, we will examine the full spectrum of the clean surface, and two subregions of the clean spectrum. The data for these spectra is stored in text files.
+
+
 #+BEGIN_SRC python
 import numpy as np
 import matplotlib.pyplot as plt
 
 E, C = np.loadtxt('data/Cu-clean-full.txt', skiprows=5, unpack=True)
-plt.plot(E,C)
+plt.plot(E, C)
 plt.xlabel('Energy (eV)')
 plt.ylabel('Intensity (counts)')
 plt.title('Full XPS scan of clean Cu')
@@ -1758,21 +1761,41 @@ plt.show()
 
 [[./images/XPS-Cu-clean-full.png]]
 
+
+Now, we examine the region associated with the Cu 2p signals. 
 #+BEGIN_SRC python
 import numpy as np
 import matplotlib.pyplot as plt
 
 E, C = np.loadtxt('data/Cu-clean-region1.txt', skiprows=5, unpack=True)
-plt.plot(E,C)
+plt.plot(E, C)
+plt.axvline(952.20, 0, 600000, 'k--')
+plt.axvline(932.67, 0, 600000, 'k--')
+
+p1_ind = E < 935
+p2_ind = (E > 945) & (E < 955)
+
+# Annotate the two peaks
+i1max = np.argmax(C[p1_ind])
+plt.annotate('{0:1.2f}'.format(E[p1_ind][i1max]), (E[p1_ind][i1max], C[p1_ind][i1max]))
+
+i2max = np.argmax(C[p2_ind])
+plt.annotate('{0:1.2f}'.format(E[p2_ind][i2max]), (E[p2_ind][i2max], C[p2_ind][i2max]))
+
+# plot the data
 plt.xlabel('Energy (eV)')
 plt.ylabel('Intensity (counts)')
 plt.savefig('images/XPS-Cu-clean-region1.png')
+plt.show()
 #+END_SRC
 
 #+RESULTS:
 
 [[./images/XPS-Cu-clean-region1.png]]
 
+Note that when we zoom in, and look at the spectrum, the peaks are not exactly at the place predicted by the Handbook. This is because the energy scale is not calibrated for the work function of the spectrometer, which introduces a constant shift in the energy scale. To be quantitative in energy scale, we must use a standard to calibrate this energy scale. Here it does not matter, so we skip that step.
+
+Finally, we examine the region where the oxygen peak is expected.
 #+BEGIN_SRC python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1788,9 +1811,7 @@ plt.savefig('images/XPS-Cu-clean-region2.png')
 
 [[./images/XPS-Cu-clean-region2.png]]
 
-There is only a trace amount of oxygen present in this spectrum.
-
-After exposing the surface to 30 L of oxygen,
+There is only a trace amount of oxygen present in this spectrum. Now we examine the spectra after exposing the surface to 30L of oxygen.
 
 #+BEGIN_SRC python
 import numpy as np
@@ -1798,16 +1819,32 @@ import matplotlib.pyplot as plt
 
 E, C = np.loadtxt('data/Cu-O-30L-region1.txt', skiprows=5, unpack=True)
 plt.plot(E,C)
+
+plt.axvline(952.20, 0, 600000, 'k--')
+plt.axvline(932.67, 0, 600000, 'k--')
+
+# Annotate the two peaks
+p1_ind = E < 935
+p2_ind = (E > 945) & (E < 955)
+
+i1max = np.argmax(C[p1_ind])
+plt.annotate('{0:1.2f}'.format(E[p1_ind][i1max]), (E[p1_ind][i1max], C[p1_ind][i1max]))
+
+i2max = np.argmax(C[p2_ind])
+plt.annotate('{0:1.2f}'.format(E[p2_ind][i2max]), (E[p2_ind][i2max], C[p2_ind][i2max]))
+
+
 plt.xlabel('Energy (eV)')
 plt.ylabel('Intensity (counts)')
 plt.savefig('images/XPS-Cu-O-30L-region1.png')
+plt.show()
 #+END_SRC
 
 #+RESULTS:
 
 [[./images/XPS-Cu-O-30L-region1.png]]
 
-We need to integrate the areas under these curves to quantify the amount of Cu present.
+You can see there is hardly any change in the position of the Cu peaks, suggesting no surface oxidation has taken place, even though there is oxygen on the surface. The peak labels above are simply the energy of the highest intensity data point, not the energy of the maximum of a fitted peak. We need to integrate the areas under these curves to quantify the amount of Cu present. We choose the first peak because it is larger. We have to define a background to subtract off. We do that by fitting a polynomial to the region before and after the peak. Then we subtract the area under the polynomial from the area under the curve. 
 
 #+BEGIN_SRC python
 import numpy as np
@@ -1821,7 +1858,7 @@ ind = E < 938
 E1 = E[ind]
 C1 = C[ind]
 
-bg = (E1 < 927) | (E1 > 936)
+bg = (E1 < 927) | (E1 > 936)  # indices of the background region
 
 pb = np.polyfit(E1[bg], C1[bg], 3)
 bgfit = np.polyval(pb, E1)
@@ -1836,13 +1873,16 @@ I1 = -np.trapz(C1, E1)
 Ib = -np.trapz(bgfit, E1)
 
 A1 = I1 - Ib
-print A1
+print 'The integrated peak area is: ',A1
 #+END_SRC
 
 #+RESULTS:
-: 1049187.85313
+: The integrated peak area is:  1049187.8531
 
 [[./images/XPS-Cu-O-bg-1.png]]
+
+Next, we consider the region where the oxygen peak is. 
+
 #+BEGIN_SRC python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1858,7 +1898,7 @@ plt.savefig('images/XPS-Cu-O-30L-region2.png')
 
 [[./images/XPS-Cu-O-30L-region2.png]]
 
-We need to integrate the area under this curve to quantify the oxygen. There is obviously a background we do not want to consider. Let us consider how to subtract it out. We say the peak is between 524 and 533 eV, and we will fit a function to the region outside it, e.g. a third order polynomial. Then, we can simply integrate the data, and the background, and take the difference. 
+We need to integrate the area under this curve to quantify the oxygen. There is obviously a background we do not want to consider. We say the peak is between 524 and 533 eV, and we will fit a function to the region outside it, e.g. a third order polynomial. Then, we can simply integrate the data, and the background, and take the difference. The choice of polynomial order affects the area by up to 10%. This is a source of uncertainty in the analysis, as there is no definitive background function to use. You should be explicit in what you do so others can reproduce it.
 
 #+BEGIN_SRC python
 import numpy as np
@@ -1887,12 +1927,14 @@ print 'The area under the curve is {0}'.format(I1 - Ib)
 #+END_SRC
 
 #+RESULTS:
-: The area under the curve is 50387.3806319
+: The area under the curve is 50387.380641
 
 [[./images/XPS-Cu-O-peak-area.png]]
 
 
-Finally to get atomic percent:
+Finally to get atomic percent, we normalize each area by its respective sensitivity factor. 
+
+[\ x_A = \frac{Area_A / S_A}{\sum Area_i / S_i} \]
 
 #+BEGIN_SRC python :results output
 A_Cu = 1049187.85313
@@ -1901,10 +1943,24 @@ A_O = 50387.3806319
 s_Cu = 4.2
 s_O = 2.1
 print (A_O / s_O) / (A_O / s_O + A_Cu / s_Cu)
+
+# in vector form:
+import numpy as np
+A = np.array([1049187.85313, 50387.3806319])
+s = np.array([4.2, 2.1])
+
+x = (A / s) / (A / s).sum()
+X = (A / s) / np.sum(A / s)
+print x
+print X
 #+END_SRC
 
 #+RESULTS:
 : 0.0876330760691
+: [ 0.91236692  0.08763308]
+: [ 0.91236692  0.08763308]
+
+Dedicated software solutions exist for analysing XPS spectra (e.g. http://www.casaxps.com/, Single Academic License: Euro 830.00!) Additional detailed information can be found at http://www.casaxps.com/ebooks/ebooks.htm. See also http://www.xpsfitting.com/2011/09/background-selection.html.
 
 * Footnotes
 
