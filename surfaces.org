@@ -1934,7 +1934,7 @@ print 'The area under the curve is {0}'.format(I1 - Ib)
 
 Finally to get atomic percent, we normalize each area by its respective sensitivity factor. 
 
-[\ x_A = \frac{Area_A / S_A}{\sum Area_i / S_i} \]
+\( x_A = \frac{Area_A / S_A}{\sum Area_i / S_i} \)
 
 #+BEGIN_SRC python :results output
 A_Cu = 1049187.85313
@@ -1961,6 +1961,158 @@ print X
 : [ 0.91236692  0.08763308]
 
 Dedicated software solutions exist for analysing XPS spectra (e.g. http://www.casaxps.com/, Single Academic License: Euro 830.00!) Additional detailed information can be found at http://www.casaxps.com/ebooks/ebooks.htm. See also http://www.xpsfitting.com/2011/09/background-selection.html.
+
+**  BET surface area
+In BET analysis, an equation is derived that relates the volume of gas adsorbed to the relative pressure of gas. This equation is derived from the following assumptions:
+
+1. Adsorption occurs in multilayers
+2. The first monolayer has one heat of adsorption
+3. Subsequent layers have a different and constant heat of adsorption
+4. There is no capillary condensation
+
+With those assumptions, the isotherm takes on this form:
+
+\[ \frac{P/P_0}{V(1 - P/P_0)} = \frac{1}{c V_m} + \frac{c-1}{c V_m} P/P_0 \]
+
+In this equation $c$ is a constant that is material specific, and $V_m$ is the volume of an adsorbed /monolayer/ of gas. From this equation, you can compute the quanties $c$ and $V_m$ by fitting a line to a plot of $\frac{P/P_0}{V(1 - P/P_0)}$ vs $P/P_0$. The slope of the line will be equal to $(c-1)/(c V_m)$, and the intercept will be equal to $1/(c V_m)$. The volume of the adsorbed monolayer is: $Vm = 1/(slope + intercept)$. We do not need to know what $c$ is. 
+
+If we know the cross-sectional area of the adsorbed molecules, we compute the surface area as:
+
+\(A_s = A_m \frac{V_m}{V_{T,P}} N_A \)
+where $A_m$ is the cross-sectional area of the molecule, $V_{T,P}$ is the standard molar volume of the gas at (T,P), and $N_A$ is Avogadro's number.
+
+Here is a worked example. Typically, one measures the volume of adsorbed gas as a function of pressure. When $P/P_0$ is less than about 0.35, the analysis is valid. Above that range, the data usually not linear.
+
+#+tblname: BET-data
+|  P/P0 | Vads (cc/g) |
+|-------+-------------|
+| 0.017 |          19 |
+| 0.041 |          31 |
+|  0.07 |          39 |
+|  0.11 |          48 |
+| 0.162 |          56 |
+| 0.209 |          63 |
+| 0.319 |          72 |
+| 0.381 |          79 |
+|  0.44 |          84 |
+|  0.53 |          95 |
+
+#+BEGIN_SRC python :var data=BET-data :session
+import numpy as np
+import matplotlib.pyplot as plt
+
+data = np.array(data)
+
+relP = np.array(data[:, 0])
+Vads = np.array(data[:, 1])
+
+plt.plot(relP, Vads)
+plt.xlabel('$P/P_0$')
+plt.ylabel('$V_{ads} (cm^3/gm)$')
+plt.savefig('images/bet-0.png')
+#+END_SRC
+
+#+RESULTS:
+: 
+: >>> >>> >>> >>> >>> >>> >>> >>> >>> [<matplotlib.lines.Line2D object at 0x043DC1F0>]
+: <matplotlib.text.Text object at 0x0438BD50>
+: <matplotlib.text.Text object at 0x043C4070>
+
+[[./images/bet-0.png]]
+
+
+#+BEGIN_SRC python  :session
+y = relP / (Vads * (1 - relP))
+
+plt.figure()
+plt.plot(relP, y, 'ko')
+plt.xlabel('$P/P_0$')
+plt.ylabel('$\\frac{P/P_0}{V(1-P/P_0)}$')
+plt.savefig('images/bet-1.png')
+#+END_SRC
+
+#+RESULTS:
+: 
+: >>> <matplotlib.figure.Figure object at 0x043C4B90>
+: [<matplotlib.lines.Line2D object at 0x044ED170>]
+: <matplotlib.text.Text object at 0x044C40B0>
+: <matplotlib.text.Text object at 0x044C7870>
+
+[[./images/bet-1.png]]
+
+Now, we compute confidence intervals on the parameters.
+#+BEGIN_SRC python :session
+from scipy.stats.distributions import  t
+
+X = np.column_stack([relP**0, relP])
+p, res, rank, s = np.linalg.lstsq(X, y)
+intercept, slope = p
+
+print 'intercept = ',p[0]
+print 'slope = ',p[1]
+
+plt.plot(relP, np.dot(X, p), 'r-')
+plt.legend(['data', 'fit'], loc='best')
+plt.savefig('images/bet-2.png')
+
+# compute the confidence intervals
+n = len(y)  # number of data points
+k = len(p)  # number of parameters
+
+sigma2 = np.sum((y - np.dot(X, p))**2) / (n - k)  # RMSE
+
+C = sigma2 * np.linalg.inv(np.dot(X.T, X)) # covariance matrix
+se = np.sqrt(np.diag(C)) # standard error
+
+alpha = 0.05 # 100*(1 - alpha) confidence level
+
+sT = t.ppf(1.0 - alpha/2.0, n - k) # student T multiplier
+CI = sT * se
+
+print
+for beta, ci in zip(p, CI):
+    print '{2: 1.4f} [{0: 1.4f} {1: 1.4f}]'.format(beta - ci, beta + ci, beta)
+#+END_SRC
+
+#+RESULTS:
+: 
+: >>> >>> >>> intercept =  0.000303436320825
+: slope =  0.0205910496331
+: >>> [<matplotlib.lines.Line2D object at 0x043D0370>]
+: <matplotlib.legend.Legend object at 0x04550A30>
+: >>> >>> ... >>> >>> >>> >>> >>> >>> >>> >>> >>> >>> >>> >>> >>>
+: ... ...  0.0003 [-0.0001  0.0007]
+:  0.0206 [ 0.0190  0.0221]
+
+[[./images/bet-2.png]]
+
+Interestingly, the intercept contains zero. The intercept is also very small, so we do not worry about it here. This may be due to fitting over too broad a range of $P/P_0$. There is clear evidence of non-linearity past $P/P_0 = 0.1$. 
+
+Finally, we compute the surface area, and do a rough calculation on the uncertainty in the surface area based on the confidence interval of the slope.
+#+BEGIN_SRC python :session
+for slope in [0.0190, 0.0206,  0.0221]:
+    Vmonolayer = 1.0 / (slope + intercept)
+    m = 1
+    Angstrom = 1e-10*m
+    Na = 6.022e23              # Avogadro's number
+    Am = 20.2 * Angstrom**2    # This is for Krypton
+    Vmolar = 22400             # cm^3/mol at STP
+    SurfaceArea = Am * Vmonolayer / Vmolar * Na 
+    print 'Surface area = {0:1.2f} m^2/gm'.format(SurfaceArea)
+#+END_SRC
+
+#+RESULTS:
+: 
+: ... ... ... ... ... ... ... ... Surface area = 281.33 m^2/gm
+: Surface area = 259.79 m^2/gm
+: Surface area = 242.40 m^2/gm
+
+That is a pretty broad range for the surface area estimate. 
+
+** Summary notes
+BET surface areas are very commonly reported. 
+
+- Molecule cross-sectional areas may be material dependent (http://pubs.acs.org/doi/abs/10.1021/la00038a006)
 
 * Footnotes
 
