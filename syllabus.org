@@ -53,6 +53,13 @@ Your course grade will be primarily determined by your performance on problem se
 |                   | 100 |
 #+TBLFM: @>$2=vsum(@2..@-1)
 
+*** Literature review project
+You should select a paper or papers from the literature that uses the techniques discussed in class to study the properties/characteristics of a surface. 
+
+You will present the paper to the class. Your presentation should be 10-12 minutes long. You may use powerpoint if you want (please provide your own laptop). Your presentation should layout what the topic of the paper is, why it is interesting, what methods were used, what the results are, and what the results mean. You should explain what the methods are, especially if they are methods that we did not cover in class, or if there are important details about the method we did not cover in class. There will be questions after the talk.
+
+Your grade will be based on the quality of presentation and visual aids if used, depth of discussion in the talk, and depth of answers to questions. 
+
 ** Grading
 You should be transitioning into a young professional at this point. That means assignments are done professionally too. In addition to the technical correctness of your work, we will also be assessing the professionalism with which it is presented.
 
