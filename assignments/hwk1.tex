@@ -1,20 +1,60 @@
-#+TITLE:     Homework 1 - Due 2/13/2013
-#+AUTHOR:    John Kitchin
-#+EMAIL:     johnrkitchin@gmail.com
-#+DATE:      2013-02-04 Mon
-#+DESCRIPTION:
-#+KEYWORDS:
-#+LANGUAGE:  en
-#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
-#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
-#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+% Created 2013-02-04 Mon 14:15
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fixltx2e}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{minted}
+\usepackage{color}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage[linktocpage,
+  pdfstartview=FitH,
+  colorlinks,
+  linkcolor=blue,
+  anchorcolor=blue,
+  citecolor=blue,
+  filecolor=blue,
+  menucolor=blue,
+  urlcolor=blue]{hyperref}
+\usepackage{attachfile}
+\tolerance=1000
+\providecommand{\alert}[1]{\textbf{#1}}
 
-* Compute the distance between the (111) planes of Ag.
+\title{Homework 1 - Due 2/13/2013}
+\author{John Kitchin}
+\date{2013-02-04 Mon}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.9.3a}}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+\vspace*{1cm}
+
+\section{Compute the distance between the (111) planes of Ag.}
+\label{sec-1}
+
 Use the experimental lattice constant of Ag.
+\subsection{solution \textbf{:solution:}}
+\label{sec-1-1}
 
-** solution							   :solution:
 We use the reciprocal metric tensor to directly compute the spacings. It does not matter which unit cell you choose.
-#+BEGIN_SRC python
+
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos]{python}
 import numpy as np
 
 a = 4.09
@@ -46,21 +86,25 @@ v = [1, 1, 1]
 d_111 = np.sqrt(np.dot(v, np.dot(gstar, v)))
 
 print 'The spacing between the (111) planes is {0} angstroms.'.format(1.0 / d_111)
-#+END_SRC
+\end{minted}
 
-#+RESULTS:
-: The spacing between the (111) planes is 2.36136260099 angstroms.
-: The spacing between the (111) planes is 2.36136260099 angstroms.
+\begin{verbatim}
+ The spacing between the (111) planes is 2.36136260099 angstroms.
+ The spacing between the (111) planes is 2.36136260099 angstroms.
+\end{verbatim}
+\section{Angles and distances}
+\label{sec-2}
 
-* Angles and distances
 Compute the length of the vector indicated by D, and the angle indicated by A. You can assume the unit cell is a cube with length of 3.6 nm on each side.
 
-[[./images/hwk1-cube.png]]
+\includegraphics[width=.9\linewidth]{./images/hwk1-cube.png}
+\subsection{solution \textbf{:solution:}}
+\label{sec-2-1}
 
-** solution							   :solution:
 The most general approach is to define the unit cell, and then define the vector in the unit cell coordinate system, and compute the distance.
 
-#+BEGIN_SRC python
+
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos]{python}
 import numpy as np
 
 a= 3.6
@@ -74,14 +118,16 @@ P = [1, 1, 1]
 
 d = np.sqrt(np.dot(np.dot(P, g), P))
 print d
-#+END_SRC
+\end{minted}
 
-#+RESULTS:
-: 6.23538290725
+\begin{verbatim}
+ 6.23538290725
+\end{verbatim}
 
 For the angle, 
 
-#+BEGIN_SRC python
+
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos]{python}
 import numpy as np
 
 a= 3.6
@@ -97,35 +143,44 @@ Q = [1, 1, 1]
 lp = np.sqrt(np.dot(P, np.dot(g, P)))
 lq = np.sqrt(np.dot(Q, np.dot(g, Q)))
 
+print lp, lq
+
 theta = np.arccos(np.dot(P, np.dot(g, Q))/(lp * lq))
 print theta * 180.0 / np.pi
-#+END_SRC
+\end{minted}
 
-#+RESULTS:
-: 35.2643896828
+\begin{verbatim}
+ 5.09116882454 6.23538290725
+ 35.2643896828
+ 54.7356103172
+\end{verbatim}
+\section{Coordinate system transformations}
+\label{sec-3}
 
-* Coordinate system transformations
 
 The unit cell of a material is given by:
-#+BEGIN_example
+
+\begin{verbatim}
      4.2266540199664249    0.0000000000000000    0.0000000000000000
      0.0000000000000000    4.2266540199664249    0.0000000000000000
      0.0000000000000000    0.0000000000000000    2.6888359272289208
-#+END_example
+\end{verbatim}
 
 The coordinates of the atoms in the unit cell are given in fractional coordinates as:
-#+BEGIN_example
+
+\begin{verbatim}
   0.0000000000000000  0.0000000000000000  0.0000000000000000
   0.5000000000000000  0.5000000000000000  0.5000000000000000
   0.3067891334429594  0.3067891334429594  0.0000000000000000
   0.6932108665570406  0.6932108665570406  0.0000000000000000
   0.1932108665570406  0.8067891334429594  0.5000000000000000
   0.8067891334429594  0.1932108665570406  0.5000000000000000
-#+END_example
+\end{verbatim}
 
 Compute the Cartesian coordinates of each atom.
+\subsection{Solution \textbf{:solution:}}
+\label{sec-3-1}
 
-** Solution							   :solution:
 
 We simply have to compute for each position (s1, s2, s3) the vector sum of s1*A + s2*B + s3*C where A, B, C are the unit cell vectors. We have a matrix where row 1 is A, row 2 is B, and row 3 is C.
 
@@ -137,9 +192,9 @@ Let this be our matrix:
 
 We end up with the following equations:
 
-p_x = s1*a1 + s2*b1 + s3*c1
-p_y = s1*a2 + s2*b2 + s3*c2
-p_z = s1*a3 + s2*b3 + s3*c3
+p$_x$ = s1*a1 + s2*b1 + s3*c1
+p$_y$ = s1*a2 + s2*b2 + s3*c2
+p$_z$ = s1*a3 + s2*b3 + s3*c3
 
 or in matrix form:
 
@@ -149,7 +204,8 @@ or in matrix form:
                c1 & c2 & c3 \end{array} \right] = [ \begin{array}{ccc} p_x & p_y & p_z\end{array}] \]
    
 
-#+BEGIN_SRC python
+
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos]{python}
 import numpy as np
 
 uc = np.array([[4.2266540199664249,    0.0000000000000000,    0.0000000000000000],
@@ -168,14 +224,17 @@ cp = np.dot(sp, uc)
 
 print cp
 
+
+
 print 'Alternative approach'
 # alternate approach
 for row in sp:
     print uc[0]*row[0] + uc[1]*row[1] + uc[2]*row[2]
-#+END_SRC
+#print uc[0] * sp[:,0] + uc[1] * sp[:,1] + uc[2] * sp[:,2]
+\end{minted}
 
-#+RESULTS:
-#+begin_example
+
+\begin{verbatim}
 [[ 0.          0.          0.        ]
  [ 2.11332701  2.11332701  1.34441796]
  [ 1.29669152  1.29669152  0.        ]
@@ -189,63 +248,71 @@ Alternative approach
 [ 2.9299625  2.9299625  0.       ]
 [ 0.81663549  3.41001853  1.34441796]
 [ 3.41001853  0.81663549  1.34441796]
-#+end_example
+\end{verbatim}
+\section{Computing unit cell parameters}
+\label{sec-4}
 
-* Computing unit cell parameters
-For the following unit cell (in rows), compute the length of each vector, and the angle between the vectors, e.g. the "a b c \alpha \beta \gamma" representation. 
+For the following unit cell (in rows), compute the length of each vector, and the angle between the vectors, e.g. the ``a b c $\alpha$ $\beta$ $\gamma$'' representation. 
 
-#+BEGIN_example
-3.817	-0.011	-0.243
--0.011	3.817	-0.243
--1.519	-1.519	4.986
-#+END_example
 
-** solution							   :solution:
-#+BEGIN_SRC python
+\begin{verbatim}
+3.817   -0.011  -0.243
+-0.011  3.817   -0.243
+-1.519  -1.519  4.986
+\end{verbatim}
+\subsection{solution \textbf{:solution:}}
+\label{sec-4-1}
+
+
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos]{python}
 import numpy as np
 from Scientific.Geometry import Vector
-A = Vector([3.817,	-0.011,	-0.243])
-B = Vector([-0.011,	3.817,	-0.243])
-C = Vector([-1.519,	-1.519,	4.986])
+A = Vector([3.817,      -0.011, -0.243])
+B = Vector([-0.011,     3.817,  -0.243])
+C = Vector([-1.519,     -1.519, 4.986])
 
 a = A.length()
 b = B.length()
 c = C.length()
-
 alpha = B.angle(C) * 180.0 / np.pi
 beta = A.angle(C) * 180.0 / np.pi
 gamma = A.angle(B) * 180.0 / np.pi
 
 print 'a={a:1.2f} b={b:1.2f} c={c:1.2f} alpha={alpha:1.2f} deg beta={beta:1.2f} deg gamma={gamma:1.2f} deg'.format(**locals())
-#+END_SRC
+\end{minted}
 
-#+RESULTS:
+\begin{verbatim}
+ a=3.82 b=3.82 c=5.43 alpha=109.68 deg beta=109.68 deg gamma=90.10 deg
+\end{verbatim}
+\section{Computing fractional coordinates}
+\label{sec-5}
 
-
-* Computing fractional coordinates
 Given this unit cell (in rows)
-#+BEGIN_example
-3.817	-0.011	-0.243
--0.011	3.817	-0.243
--1.519	-1.519	4.986
-#+END_example
+
+\begin{verbatim}
+3.817   -0.011  -0.243
+-0.011  3.817   -0.243
+-1.519  -1.519  4.986
+\end{verbatim}
 
 And atoms at these cartesian coordinates:
 
-#+BEGIN_EXAMPLE
+
+\begin{verbatim}
  [[ 1.23141,   0.239958,  3.102345]
   [ 1.05559,   2.047042,  1.397655]
   [-0.626458,  2.21009,   3.890655]
   [ 2.913458,  0.07691,   0.609345]
   [ 1.004314,  0.139186,  1.125   ]
   [ 1.282686,  2.147814,  3.375   ]]
-#+END_EXAMPLE
+\end{verbatim}
 
 Compute the fractional coordinates of each atom in the unit cell.
+\subsection{solution \textbf{:solution:}}
+\label{sec-5-1}
 
 
-** solution							   :solution:
-#+BEGIN_SRC python
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos]{python}
 import numpy as np
 
 uc = np.array([[3.817,  -0.011, -0.243],
@@ -263,10 +330,10 @@ print np.dot(np.linalg.inv(uc.T), cp.T).T
 
 print 'alternative, and equivalent linear algebra'
 print np.dot(cp, np.linalg.inv(uc))
-#+END_SRC
+\end{minted}
 
-#+RESULTS:
-#+begin_example
+
+\begin{verbatim}
 [[ 0.589  0.33   0.667]
  [ 0.411  0.67   0.333]
  [ 0.17   0.911  0.833]
@@ -280,4 +347,6 @@ alternative, and equivalent linear algebra
  [ 0.83   0.089  0.167]
  [ 0.363  0.137  0.25 ]
  [ 0.637  0.863  0.75 ]]
-#+end_example
+\end{verbatim}
+
+\end{document}

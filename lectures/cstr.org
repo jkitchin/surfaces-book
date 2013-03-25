@@ -1,0 +1,173 @@
+
+#+BEGIN_SRC python
+from __future__ import division
+import sys
+sys.path.insert(0, 'c:/Users/jkitchin/Dropbox/pycse')
+import numpy as np
+from pycse.units import units
+
+u = units()
+
+W = 25 * u.kg
+v = 1.0 * u.L / u.s
+
+k1 = 2.3e-5 / (u.Pa * u.s)
+k2 = 1000.0 / u.s
+k3 = 100.0 / u.s
+
+Fa0 = 15.0 * u.mol / u.s
+Fa = np.linspace(0.0, 15, 500) * u.mol / u.s
+
+Ca = Fa / v
+R = 8.314 * u.J / u.mol / u.K
+T = 500.0 * u.K
+
+Pa = Ca * R * T
+
+SA = 50 * u.m**2 / u.gm
+site_density = 1e14/6.022e23 * u.mol / u.cm**2
+
+rho = 2.5 * u.gm / u.mL
+print 'reactor volume = {0!s}'.format((W / rho))
+
+ra = - site_density * SA  * (k1*k2*k3*Pa / (k2*k3 + k1*k3*Pa + k1*k2*Pa))
+#ra = -(k1*k2*k3*Pa / (k2*k3 + k1*k3*Pa + k1*k2*Pa))
+
+import matplotlib.pyplot as plt
+plt.plot(1 - Fa/Fa0, W - (Fa0 - Fa)/(-ra))
+plt.ylim([-30, 30])
+plt.xlabel('X')
+plt.axhline(0, 0, 1)
+
+def func(Fa):
+    Fa = Fa * u.mol/u.s  # we have to put the units back on
+    Pa = Fa  / v * R * T
+    ra = - site_density * SA  * (k1*k2*k3*Pa / (k2*k3 + k1*k3*Pa + k1*k2*Pa))
+    return W - (Fa0 - Fa) / (-ra)
+
+from scipy.optimize import fsolve
+
+Faexit, = fsolve(func, 0.01*Fa0)
+Faexit = Faexit * u.mol/u.s  # we have to put units back on
+print 'Exit conversion = {0:1.2f}'.format(1 - Faexit/Fa0)
+print Faexit
+plt.show()
+
+#+END_SRC
+
+#+RESULTS:
+: reactor volume = 0.01 * m^3
+: Exit conversion = 0.99
+: 0.0816229163811
+
+
+
+#+BEGIN_SRC python
+from __future__ import division
+print 1/3
+print 1//3
+#+END_SRC
+
+#+RESULTS:
+: 0.333333333333
+: 0
+
+#+BEGIN_SRC python
+from __future__ import division
+import sys
+sys.path.insert(0, 'c:/Users/jkitchin/Dropbox/pycse')
+import numpy as np
+from pycse.units import units
+
+u = units()
+
+W = 25 * u.kg
+v = 1.0 * u.L / u.s
+
+k1 = 2.3e-5 / (u.Pa * u.s)
+k2 = 1000.0 / u.s
+k3 = 100.0 / u.s
+
+Fa0 = 15.0 * u.mol / u.s
+
+R = 8.314 * u.J / u.mol / u.K
+T = 500.0 * u.K
+
+SA = 5.0 * u.m**2 / u.gm
+site_density = 1e14/6.022e23 * u.mol / u.cm**2
+
+
+def odefun(Fa, W):
+    'dFa/dW = -ra'
+    Fa = Fa * u.mol/u.s  # we have to put the units back on
+    Pa = Fa  / v * R * T
+    ra = - site_density * SA  * (k1*k2*k3*Pa / (k2*k3 + k1*k3*Pa + k1*k2*Pa))
+    dFadW = ra
+    return dFadW
+
+from scipy.integrate import odeint
+
+Wspan = np.linspace(0, 25)*u.kg
+
+sol = odeint(odefun, Fa0, Wspan)
+print sol
+import matplotlib.pyplot as plt
+plt.plot(Wspan, sol)
+plt.show()
+
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+[[ 15.        ]
+ [ 14.63811458]
+ [ 14.27677365]
+ [ 13.91600336]
+ [ 13.55583043]
+ [ 13.19628386]
+ [ 12.83739461]
+ [ 12.47919614]
+ [ 12.12172435]
+ [ 11.76501802]
+ [ 11.40911888]
+ [ 11.05407212]
+ [ 10.69992666]
+ [ 10.34673567]
+ [  9.99455692]
+ [  9.64345344]
+ [  9.29349408]
+ [  8.94475434]
+ [  8.597317  ]
+ [  8.25127318]
+ [  7.90672347]
+ [  7.56377922]
+ [  7.22256396]
+ [  6.8832154 ]
+ [  6.54588709]
+ [  6.21075143]
+ [  5.8780023 ]
+ [  5.54785845]
+ [  5.22056786]
+ [  4.89641268]
+ [  4.57571507]
+ [  4.25884477]
+ [  3.94622738]
+ [  3.63835502]
+ [  3.33579879]
+ [  3.03922375]
+ [  2.74940631]
+ [  2.46725433]
+ [  2.19382927]
+ [  1.93036883]
+ [  1.67830694]
+ [  1.43928448]
+ [  1.21514   ]
+ [  1.00786317]
+ [  0.81948879]
+ [  0.65190849]
+ [  0.50659414]
+ [  0.38426766]
+ [  0.28461162]
+ [  0.20615286]]
+#+end_example
+

@@ -1,0 +1,651 @@
+#+TITLE:     Effects of pressure drop on reactor design
+#+AUTHOR:    John Kitchin
+#+EMAIL:     johnrkitchin@gmail.com
+#+DATE:      2013-03-25 Mon
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+
+* Brief introduction to units in Python
+See https://pypi.python.org/pypi/quantities. Automatic (and correct) units handling (dimensional consistency, conversions, etc...) will save you many errors.
+
+#+BEGIN_SRC python :session
+import quantities as u
+
+M = 5 * u.lb
+print M
+print M.rescale(u.kg)
+
+t = 4 * u.s
+
+print M / t
+
+mdot = M / t
+print mdot.dimensionality.latex
+#+END_SRC
+
+#+RESULTS:
+: 
+: >>> >>> 5.0 lb
+: 2.26796185 kg
+: >>> >>> >>> 1.25 lb/s
+: >>> >>> $\mathrm{\frac{lb}{s}}$
+
+#+BEGIN_SRC python :session
+print M + t # Error!
+#+END_SRC
+
+#+RESULTS:
+: Traceback (most recent call last):
+:   File "<stdin>", line 1, in <module>
+:   File "c:\Python27\lib\site-packages\quantities\quantity.py", line 63, in g
+:     other = other.rescale(self.units)
+:   File "c:\Python27\lib\site-packages\quantities\quantity.py", line 196, in rescale
+:     %(from_u._dimensionality, to_u._dimensionality)
+: ValueError: Unable to convert between units of "s" and "lb"
+
+
+
+#+BEGIN_SRC python :session
+import numpy as np
+
+print np.sin(M)
+print np.exp(M)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+>>> Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "c:\Python27\lib\site-packages\quantities\quantity.py", line 231, in __array_prepare__
+    res._dimensionality = p_dict[uf](*objs)
+  File "c:\Python27\lib\site-packages\quantities\dimensionality.py", line 363, in _d_trig
+    'expected units of radians, got "%s"' % q1._dimensionality
+ValueError: expected units of radians, got "lb"
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "c:\Python27\lib\site-packages\quantities\quantity.py", line 231, in __array_prepare__
+    res._dimensionality = p_dict[uf](*objs)
+  File "c:\Python27\lib\site-packages\quantities\dimensionality.py", line 347, in _d_dimensionless
+    raise ValueError("quantity must be dimensionless")
+ValueError: quantity must be dimensionless
+#+end_example
+
+Note however, that use of units is fragile. Many functions will lose the units, defeating the purpose of using them!
+
+#+BEGIN_SRC python
+import numpy as np
+from scipy.integrate import odeint
+import quantities as u
+
+k = 0.23 / u.s
+Ca0 = 1 * u.mol / u.L
+
+def dCadt(Ca, t):
+    return -k * Ca
+
+tspan = np.linspace(0, 5) * u.s
+
+sol = odeint(dCadt, Ca0, tspan)
+
+print sol[-1] # so sad, no units.
+#+END_SRC
+
+#+RESULTS:
+: [ 0.31663678]
+
+Or worse:
+
+#+BEGIN_SRC python :session
+import quantities as u
+import numpy as np
+
+from scipy.optimize import fsolve
+CA0 = 1 * u.mol / u.L
+CA = 0.01 * u.mol / u.L
+k = 1.0 / u.s
+
+def func(t):
+    return CA - CA0 * np.exp(-k * t)
+
+tguess = 4 * u.s
+
+print func(tguess)
+
+print fsolve(func, tguess)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+>>> >>> >>> >>> >>> >>> >>> ... ... >>> >>> >>> -0.00831563888873 mol/L
+>>> Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "c:\Python27\lib\site-packages\scipy\optimize\minpack.py", line 115, in fsolve
+    _check_func('fsolve', 'func', func, x0, args, n, (n,))
+  File "c:\Python27\lib\site-packages\scipy\optimize\minpack.py", line 13, in _check_func
+    res = atleast_1d(thefunc(*((x0[:numinputs],) + args)))
+  File "<stdin>", line 2, in func
+  File "c:\Python27\lib\site-packages\quantities\quantity.py", line 231, in __array_prepare__
+    res._dimensionality = p_dict[uf](*objs)
+  File "c:\Python27\lib\site-packages\quantities\dimensionality.py", line 347, in _d_dimensionless
+    raise ValueError("quantity must be dimensionless")
+ValueError: quantity must be dimensionless
+#+end_example
+
+What has happened here is that the fsolve function stripped the units from tguess, and then passed the unitless quantity to func, which then tried to take the exponential of a quantity with units. That is not allowed, so an error was raised.
+
+This is a general challenge, and you cannot expect units to work with arbitrary third party functions.
+
+#+BEGIN_SRC python
+import quantities as u
+import numpy as np
+
+a = 5 * u.m
+
+# Any of these commands inside a function will strip the units
+print float(a)
+print np.array(a)
+print np.asarray(a)
+#+END_SRC 
+
+#+RESULTS:
+: 5.0
+: 5.0
+: 5.0
+
+The only solution is to wrap external functions in new functions that can put appropriate units back onto the output.
+
+#+BEGIN_SRC python
+import quantities as u
+import numpy as np
+
+from scipy.optimize import fsolve as _fsolve
+
+CA0 = 1 * u.mol / u.L
+CA = 0.01 * u.mol / u.L
+k = 1.0 / u.s
+
+def func(t):
+    return CA - CA0 * np.exp(-k * t)
+
+def fsolve(func, t0):
+    'wrapped fsolve command to work with units'
+    def wrapped_func(t):
+        't may be unitless, so we add units to it if needed'
+        if not hasattr(t, 'units'):
+            t = t * t0.units
+        return func(t)
+
+    sol, = _fsolve(wrapped_func, t0)
+    return sol * t0.units
+    
+tguess = 4 * u.s
+print tguess.units
+print fsolve(func, tguess)
+#+END_SRC
+
+#+RESULTS:
+: 1.0 s
+: 4.60517018599 s
+
+That wrapped function provides some, but not all of the  features of the fsolve command. The pattern is one you must use for external functions. You put units onto arguments as needed, or make sure to call the external function with properly scaled unitless numbers, and then put units back on the output.
+
+* No pressure drop
+Adapted from Example 4-6 (page 191) in Elements of Chemical Reaction Engineering (Fogler).
+#+BEGIN_SRC python
+import quantities as u
+import matplotlib.pyplot as plt
+
+import numpy as np
+from scipy.integrate import odeint as _odeint
+import copy
+
+def odeint(func, y0, t, args=(),
+           Dfun=None, col_deriv=0, full_output=0,
+           ml=None, mu=None, rtol=None, atol=None,
+           tcrit=None, h0=0.0, hmax=0.0, hmin=0.0,
+           ixpr=0, mxstep=0, mxhnil=0, mxordn=12,
+           mxords=5, printmessg=0):
+
+    def wrapped_func(Y0, T, *args):
+        # put units on T if they are on the original t
+        # check for units so we don't put them on twice
+        if not hasattr(T, 'units') and hasattr(t, 'units'):
+            T = T * t.units
+        # now for the dependent variable units. Y0 may be a scalar or
+        # a list or an array. we want to check each element of y0 for
+        # units, and add them to the corresponding element of Y0 if we
+        # need to.
+        try:
+            uY0 = [x for x in Y0] # a list copy of contents of Y0
+            # this works if y0 is an iterable, eg. a list or array
+            for i, yi in enumerate(y0):
+                if not hasattr(uY0[i],'units') and hasattr(yi, 'units'):
+               
+                    uY0[i] = uY0[i] * yi.units
+                
+        except TypeError:
+            # we have a scalar
+            if not hasattr(Y0, 'units') and hasattr(y0, 'units'):
+                uY0 = Y0 * y0.units
+       
+        val = func(uY0, t, *args)
+
+        try:
+            return np.array([float(x) for x in val])
+        except TypeError:
+            return float(val)
+    
+    if full_output:
+        y, infodict = _odeint(wrapped_func, y0, t, args,
+                              Dfun, col_deriv, full_output,
+                              ml, mu, rtol, atol,
+                              tcrit, h0, hmax, hmin,
+                              ixpr, mxstep, mxhnil, mxordn,
+                              mxords, printmessg)
+    else:
+        y = _odeint(wrapped_func, y0, t, args,
+                    Dfun, col_deriv, full_output,
+                    ml, mu, rtol, atol,
+                    tcrit, h0, hmax, hmin,
+                    ixpr, mxstep, mxhnil, mxordn,
+                    mxords, printmessg)
+
+    # now we need to put units onto the solution units should be the
+    # same as y0. We cannot put mixed units in an array, so, we return a list
+    m,n = y.shape # y is an ndarray, so it has a shape
+    if n > 1: # more than one equation, we need a list
+        uY = [0 for yi in range(n)]
+        
+        for i, yi in enumerate(y0):
+            if not hasattr(uY[i],'units') and hasattr(yi, 'units'):
+                uY[i] = y[:,i] * yi.units
+            else:
+                uY[i] = y[:,i]
+                
+    else:
+        uY = y * y0.units
+
+    y = uY
+
+    if full_output:
+        return y, infodict
+    else:
+        return y
+
+##################################################################
+from quantities.unitquantity import UnitSubstance
+
+u.lbmol = UnitSubstance('lbmol', 453.59237*u.mol, symbol='lb-mol')
+
+Fa0 = 1.08 * u.lbmol / u.hr
+Fb0 = 0.5 * Fa0
+Fc0 = 0 * u.lbmol / u.hr
+Fi0 = Fb0 * 0.79 / 0.21
+
+P0 = 10.0 * u.atm
+
+k = 0.0141 * u.lbmol / (u.atm * u.lb * u.hr)
+
+def dFdW(F, W):
+    Fa, Fb, Fc = F
+    Ft = Fa + Fb + Fc + Fi0 
+    
+    Pa = Fa / Ft * P0
+    Pb = Fb / Ft * P0
+    rprime = k * Pa**(1.0/3.0) * Pb**(2.0 / 3.0)
+    
+    dFadW = -rprime
+    dFbdW = -0.5 * rprime
+    dFcdW =  rprime
+        
+    return [dFadW, dFbdW, dFcdW]
+
+F0 = [Fa0, Fb0, Fc0]  # initial conditions
+
+Wspan = np.linspace(0, 60) * u.lb
+
+sol = odeint(dFdW, F0, Wspan)
+
+for species, stream in zip('ABC', sol):
+    print 'The exit molar flow of {0} is {1}'.format(species, stream[-1])
+
+plt.plot(Wspan, sol[0],
+         Wspan, sol[1],
+         Wspan, sol[2])
+
+plt.legend(['A', 'B', 'C'])
+plt.xlabel('Catalyst weight ({0})'.format(Wspan.dimensionality.latex))
+plt.ylabel('$F_i$ ({0})'.format(sol[0].dimensionality.latex))
+
+plt.savefig('./images/no-pressure-drop.png')
+#+END_SRC
+
+#+RESULTS:
+: The exit molar flow of A is 0.223516163362 lb-mol/h
+: The exit molar flow of B is 0.111758081681 lb-mol/h
+: The exit molar flow of C is 0.856483836638 lb-mol/h
+
+[[./images/no-pressure-drop.png]]
+
+** Pressure drop in a reactor with units
+#+BEGIN_SRC python
+import quantities as u
+import matplotlib.pyplot as plt
+
+import numpy as np
+from scipy.integrate import odeint as _odeint
+import copy
+
+def odeint(func, y0, t, args=(),
+           Dfun=None, col_deriv=0, full_output=0,
+           ml=None, mu=None, rtol=None, atol=None,
+           tcrit=None, h0=0.0, hmax=0.0, hmin=0.0,
+           ixpr=0, mxstep=0, mxhnil=0, mxordn=12,
+           mxords=5, printmessg=0):
+
+    def wrapped_func(Y0, T, *args):
+        # put units on T if they are on the original t
+        # check for units so we don't put them on twice
+        if not hasattr(T, 'units') and hasattr(t, 'units'):
+            T = T * t.units
+        # now for the dependent variable units. Y0 may be a scalar or
+        # a list or an array. we want to check each element of y0 for
+        # units, and add them to the corresponding element of Y0 if we
+        # need to.
+        try:
+            uY0 = [x for x in Y0] # a list copy of contents of Y0
+            # this works if y0 is an iterable, eg. a list or array
+            for i, yi in enumerate(y0):
+                if not hasattr(uY0[i],'units') and hasattr(yi, 'units'):
+               
+                    uY0[i] = uY0[i] * yi.units
+                
+        except TypeError:
+            # we have a scalar
+            if not hasattr(Y0, 'units') and hasattr(y0, 'units'):
+                uY0 = Y0 * y0.units
+       
+        val = func(uY0, t, *args)
+
+        try:
+            return np.array([float(x) for x in val])
+        except TypeError:
+            return float(val)
+    
+    if full_output:
+        y, infodict = _odeint(wrapped_func, y0, t, args,
+                              Dfun, col_deriv, full_output,
+                              ml, mu, rtol, atol,
+                              tcrit, h0, hmax, hmin,
+                              ixpr, mxstep, mxhnil, mxordn,
+                              mxords, printmessg)
+    else:
+        y = _odeint(wrapped_func, y0, t, args,
+                    Dfun, col_deriv, full_output,
+                    ml, mu, rtol, atol,
+                    tcrit, h0, hmax, hmin,
+                    ixpr, mxstep, mxhnil, mxordn,
+                    mxords, printmessg)
+
+    # now we need to put units onto the solution units should be the
+    # same as y0. We cannot put mixed units in an array, so, we return a list
+    m,n = y.shape # y is an ndarray, so it has a shape
+    if n > 1: # more than one equation, we need a list
+        uY = [0 for yi in range(n)]
+        
+        for i, yi in enumerate(y0):
+            if not hasattr(uY[i],'units') and hasattr(yi, 'units'):
+                uY[i] = y[:,i] * yi.units
+            else:
+                uY[i] = y[:,i]
+                
+    else:
+        uY = y * y0.units
+
+    y = uY
+
+
+    if full_output:
+        return y, infodict
+    else:
+        return y
+
+##################################################################
+from quantities.unitquantity import UnitSubstance
+
+u.lbmol = UnitSubstance('lbmol', 453.59237*u.mol, symbol='lb-mol')
+
+Fa0 = 1.08 * u.lbmol / u.hr
+Fb0 = 0.5 * Fa0
+Fc0 = 0 * u.lbmol / u.hr
+Fi0 = Fb0 * 0.79 / 0.21
+Ft0 = Fa0 + Fb0 + Fc0 + Fi0
+
+P0 = 10.0 * u.atm
+
+k = 0.0141 * u.lbmol / (u.atm * u.lb * u.hr)
+
+alpha = 0.0166 / u.lb
+
+def dFdW(F, W):
+    Fa, Fb, Fc, P = F
+    Ft = Fa + Fb + Fc + Fi0 
+    
+    Pa = Fa / Ft * P
+    Pb = Fb / Ft * P
+    rprime = k * Pa**(1.0/3.0) * Pb**(2.0 / 3.0)
+    
+    dFadW = -rprime
+    dFbdW = -0.5 * rprime
+    dFcdW = rprime
+    
+    dPdW = -alpha / 2.0 * P0 / (P / P0) * Ft / Ft0
+    
+    return [dFadW, dFbdW, dFcdW, dPdW]
+
+F0 = [Fa0, Fb0, Fc0, P0]
+
+Wspan = np.linspace(0, 64, 500) * u.lb
+
+sol = odeint(dFdW, F0, Wspan)
+
+plt.plot(Wspan, sol[0],
+         Wspan, sol[1],
+         Wspan, sol[2])
+
+plt.legend(['A', 'B', 'C', 'I'])
+plt.xlabel('Catalyst weight ({0})'.format(Wspan.dimensionality.latex))
+plt.ylabel('$F_i$ ({0})'.format(sol[0].dimensionality.latex))
+plt.savefig('images/with-pressure-drop.png')
+
+plt.figure()
+plt.plot(Wspan, sol[-1])
+plt.xlabel('Catalyst weight ({0})'.format(Wspan.dimensionality.latex))
+plt.ylabel('$P$ ({0})'.format(sol[-1].dimensionality.latex))
+plt.savefig('images/with-pressure-drop-pressure.png')
+
+for species, stream in zip('ABC', sol):
+    print 'Exit molar flow of {0} is {1}'.format(species, stream[-1])
+
+plt.show()
+#+END_SRC
+
+#+RESULTS:
+: Exit molar flow of A is 0.359639480793 lb-mol/h
+: Exit molar flow of B is 0.179819740397 lb-mol/h
+: Exit molar flow of C is 0.720360519207 lb-mol/h
+
+[[./images/with-pressure-drop.png]]
+[[./images/with-pressure-drop-pressure.png]]
+
+You can see a significant pressure loss in the reactor, with a corresponding decrease in the exit molar flow rate of species C (with no pressure drop the exit molar flow rate was 0.85 lb-mol/h).
+
+** Particle size dependence
+#+BEGIN_SRC python
+import quantities as u
+import matplotlib.pyplot as plt
+
+import numpy as np
+from scipy.integrate import odeint as _odeint
+import copy
+
+def odeint(func, y0, t, args=(),
+           Dfun=None, col_deriv=0, full_output=0,
+           ml=None, mu=None, rtol=None, atol=None,
+           tcrit=None, h0=0.0, hmax=0.0, hmin=0.0,
+           ixpr=0, mxstep=0, mxhnil=0, mxordn=12,
+           mxords=5, printmessg=0):
+
+    def wrapped_func(Y0, T, *args):
+        # put units on T if they are on the original t
+        # check for units so we don't put them on twice
+        if not hasattr(T, 'units') and hasattr(t, 'units'):
+            T = T * t.units
+        # now for the dependent variable units. Y0 may be a scalar or
+        # a list or an array. we want to check each element of y0 for
+        # units, and add them to the corresponding element of Y0 if we
+        # need to.
+        try:
+            uY0 = [x for x in Y0] # a list copy of contents of Y0
+            # this works if y0 is an iterable, eg. a list or array
+            for i, yi in enumerate(y0):
+                if not hasattr(uY0[i],'units') and hasattr(yi, 'units'):
+               
+                    uY0[i] = uY0[i] * yi.units
+                
+        except TypeError:
+            # we have a scalar
+            if not hasattr(Y0, 'units') and hasattr(y0, 'units'):
+                uY0 = Y0 * y0.units
+       
+        val = func(uY0, t, *args)
+
+        try:
+            return np.array([float(x) for x in val])
+        except TypeError:
+            return float(val)
+    
+    if full_output:
+        y, infodict = _odeint(wrapped_func, y0, t, args,
+                              Dfun, col_deriv, full_output,
+                              ml, mu, rtol, atol,
+                              tcrit, h0, hmax, hmin,
+                              ixpr, mxstep, mxhnil, mxordn,
+                              mxords, printmessg)
+    else:
+        y = _odeint(wrapped_func, y0, t, args,
+                    Dfun, col_deriv, full_output,
+                    ml, mu, rtol, atol,
+                    tcrit, h0, hmax, hmin,
+                    ixpr, mxstep, mxhnil, mxordn,
+                    mxords, printmessg)
+
+    # now we need to put units onto the solution units should be the
+    # same as y0. We cannot put mixed units in an array, so, we return a list
+    m,n = y.shape # y is an ndarray, so it has a shape
+    if n > 1: # more than one equation, we need a list
+        uY = [0 for yi in range(n)]
+        
+        for i, yi in enumerate(y0):
+            if not hasattr(uY[i],'units') and hasattr(yi, 'units'):
+                uY[i] = y[:,i] * yi.units
+            else:
+                uY[i] = y[:,i]
+                
+    else:
+        uY = y * y0.units
+
+    y = uY
+
+
+    if full_output:
+        return y, infodict
+    else:
+        return y
+
+##################################################################
+from quantities.unitquantity import UnitSubstance
+
+u.lbmol = UnitSubstance('lbmol', 453.59237*u.mol, symbol='lb-mol')
+
+Fa0 = 1.08 * u.lbmol / u.hr
+Fb0 = 0.5 * Fa0
+Fc0 = 0 * u.lbmol / u.hr
+Fi0 = Fb0 * 0.79 / 0.21
+Ft0 = Fa0 + Fb0 + Fc0 + Fi0
+
+P0 = 10.0 * u.atm
+
+k = 0.0141 * u.lbmol / (u.atm * u.lb * u.hr)
+
+alpha0 = 0.0166 / u.lb
+Dp0 = 10 * u.mm
+
+c = 1e-2 / u.mm
+
+def dFdW(F, W, Dp):
+    Fa, Fb, Fc, P = F
+    Ft = Fa + Fb + Fc + Fi0 
+    
+    Pa = Fa / Ft * P
+    Pb = Fb / Ft * P
+
+    PHI = c * Dp
+
+    kprime = k * 3 / PHI**2 * (PHI / np.tanh(PHI) - 1)
+    rprime = kprime * Pa**(1.0 / 3.0) * Pb**(2.0 / 3.0)
+    
+    dFadW = -rprime
+    dFbdW = -0.5 * rprime
+    dFcdW = rprime
+
+    alpha = alpha0 * Dp0 / Dp
+    
+    dPdW = -alpha / 2.0 * P0 / (P / P0) * Ft / Ft0
+    
+    return [dFadW, dFbdW, dFcdW, dPdW]
+
+F0 = [Fa0, Fb0, Fc0, P0]
+
+Wspan = np.linspace(0, 60) * u.lb
+
+Dps = np.linspace(9.4, 100, 10) * u.mm
+
+exitFC = []
+Pdrops = []
+for Dp in Dps:
+    sol = odeint(dFdW, F0, Wspan, args=(Dp,))
+    Fc = sol[2]
+    P = sol[3]
+    exitFC += [Fc[-1]]
+    Pdrops += [P[-1] - P0]
+
+plt.figure()
+plt.plot(Dps, exitFC)
+plt.xlabel('Particle diameter ({0})'.format(Dps.dimensionality.latex))
+plt.ylabel('$F_C$ ({0})'.format(Fc.dimensionality.latex))
+plt.savefig('images/particle-diameter-Fc.png')
+
+plt.figure()
+plt.plot(Dps, Pdrops)
+plt.xlabel('Particle diameter ({0})'.format(Dps.dimensionality.latex))
+plt.ylabel('$\Delta P$ ({0})'.format(P.dimensionality.latex))
+plt.savefig('images/particle-diameter-pdrops.png')
+#+END_SRC
+
+#+RESULTS:
+
+[[./images/particle-diameter-Fc.png]]
+
+[[./images/particle-diameter-pdrwops.png]]

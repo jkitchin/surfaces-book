@@ -1,0 +1,175 @@
+#+TITLE:     Homework 2 - Due 2/20/2013
+#+AUTHOR:    John Kitchin
+#+EMAIL:     johnrkitchin@gmail.com
+#+DATE:      2013-02-13 Mon
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+
+* Calculate the number of atoms/cm^{2} in the following surfaces:
+
+a) FCC(100) Cu, Pt
+
+b) FCC(111) Cu, Pt
+
+c) BCC(100) Mo,W
+
+d) BCC(110) Mo, W
+
+** Solution :solution:
+*** a)
+Cu: 3.61 \AA
+Pt: 3.92 \AA
+
+There are 2 atoms on the fcc(100) face, and the area of the face is $a^2$. 1 \AA = 1e-10 m
+
+#+BEGIN_SRC python
+m = 1
+cm = 0.01 * m
+Ang = 1e-10 * m 
+
+print 'Cu(100): {0:1.2E} atoms/cm^2'.format(2.0 / (3.61 * Ang / cm)**2)
+print 'Pt(100): {0:1.2E} atoms/cm^2'.format(2.0 / (3.92 * Ang / cm)**2)
+#+END_SRC
+
+#+RESULTS:
+: Cu: 1.53E+15 atoms/cm^2
+: Pt: 1.30E+15 atoms/cm^2
+
+*** b)
+We need the area of an fcc(111) unit cell. We can compute this from the primitive lattice vectors, which form a primitive fcc(111) cell containing one atom.
+
+#+BEGIN_SRC python
+import numpy as np
+m = 1
+cm = 0.01 * m
+Ang = 1e-10 * m 
+
+a = 3.61
+b = a / 2.0
+
+v1 = np.array([0.0, b, b])
+v2 = np.array([b, 0.0, b])
+A = np.linalg.norm(np.cross(v1, v2))* Ang**2 /(cm**2)
+
+print 'Cu(111): {0:1.2E} atoms/cm^2'.format(1.0 / A)
+
+a = 3.92
+b = a / 2.0
+
+v1 = np.array([0.0, b, b])
+v2 = np.array([b, 0.0, b])
+A = np.linalg.norm(np.cross(v1, v2))* Ang**2 /(cm**2)
+print 'Pt(111): {0:1.2E} atoms/cm^2'.format(1.0 / A)
+#+END_SRC
+
+#+RESULTS:
+: Cu(111): 1.77E+15 atoms/cm^2
+: Pt(111): 1.50E+15 atoms/cm^2
+
+The 111 surface is more densely packed than the (100) surface.
+
+*** c)
+
+Mo = 3.15
+W = 3.16
+
+The bcc(100) surface only has one atom in it, and the area is $a^2$.
+
+#+BEGIN_SRC python
+m = 1
+cm = 0.01 * m
+Ang = 1e-10 * m 
+print 'Mo(100): {0:2e} atoms/cm^2'.format(1.0 / (3.15**2 *Ang**2 / cm**2))
+print 'W(100): {0:2e} atoms/cm^2'.format(1.0 / (3.16**2 *Ang**2 / cm**2))
+#+END_SRC
+
+#+RESULTS:
+: Mo(100): 1.007811e+15 atoms/cm^2
+: W(100): 1.001442e+15 atoms/cm^2
+
+*** d) 
+
+The bcc(110) surface has two atoms in it. The area of the unit cell is $a * \sqrt(2) * a$.
+
+#+BEGIN_SRC python
+import numpy as np
+
+m = 1
+cm = 0.01 * m
+Ang = 1e-10 * m 
+print 'Mo(110): {0:2e} atoms/cm^2'.format(2.0 / (3.15**2 * np.sqrt(2) * Ang**2 / cm**2))
+print 'W(110): {0:2e} atoms/cm^2'.format(2.0 / (3.16**2 * np.sqrt(2) * Ang**2 / cm**2))
+#+END_SRC
+
+#+RESULTS:
+: Mo(110): 1.425259e+15 atoms/cm^2
+: W(110): 1.416253e+15 atoms/cm^2
+
+* In the following image the large blue circles are the surface metal atoms and the small black circles represent adsorbates.
+
+[[./images/hwk2-leed.png]]
+
+a) Give an example of what surface the large circles could represent.
+
+b) Describe the overlayer in each case using matrix notation. If possible, also express the overlayer using Wood's notation.
+
+c) Calculate the reciprocal lattice vectors for each case.
+
+d) Sketch the LEED pattern you expect for these two surfaces.
+
+** solution :solution:
+*** a. This could be an fcc or bcc (100) surface.
+
+*** b) 
+on A: 
+#+BEGIN_EXAMPLE
+[[1 1]
+ [1 -1]]
+#+END_EXAMPLE
+
+In Wood's notation, p($\sqrt{2} \times \sqrt{2}) R 45^\circ$
+
+on B:
+#+BEGIN_EXAMPLE
+[[2 1]
+ [0 2]]
+#+END_EXAMPLE
+
+This can be described as c(4 \times 2)
+
+*** c) 
+#+BEGIN_SRC python
+import numpy as np
+
+uc1 = np.array([[1, 1], [1, -1]])
+
+print np.linalg.inv(uc1.T)
+#+END_SRC
+
+#+RESULTS:
+: [[ 0.5  0.5]
+:  [ 0.5 -0.5]]
+
+#+BEGIN_SRC python
+import numpy as np
+
+uc1 = np.array([[2, 1], [0, 2]])
+
+print np.linalg.inv(uc1.T)
+#+END_SRC
+
+#+RESULTS:
+: [[ 0.5   0.  ]
+:  [-0.25  0.5 ]]
+
+*** d)
+
+A)
+[[./images/leed-image-1.png]]
+
+B)
+[[./images/leed-image-2.png]]
