@@ -1,0 +1,63 @@
+
+
+#+BEGIN_SRC python
+from pycse import bvp_sh
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+De = 0.2    # diffusivity cm^2/s
+R  = 0.25    # particle radius, cm
+k  = 6.4    # rate constant (1/s)
+CAs = 0.2   # concentration of A at outer radius of particle (mol/L)
+
+def odefun(Y, r):
+    Wa = Y[0] # molar rate of delivery of A to surface of particle
+    Ca = Y[1] # concentration of A in the particle at r
+
+    if r == 0:
+        dWadr = 0   #this solves the singularity at r = 0
+    else:
+        dWadr = -2*Wa/r + k/De*Ca
+
+    dCadr = Wa
+
+    return [dWadr, dCadr]
+
+def bcfun(Ya, Yb):
+    #y1 = Wa
+    #y2 = Ca
+    y1a, y2a = Ya  # bc at r=0
+    y1b, y2b = Yb  # bc at r=R
+
+    return [y1a, # at r=0 we have dCa/dr = Wa = 0
+            y2b - CAs] # at r=R we have Ca = Cas
+
+r = np.linspace(0, R, 100)
+
+sol = bvp_sh(odefun, bcfun, r, [0, 0.03])
+
+Wa = sol[:,0]
+Ca = sol[:,1]
+
+#print Wa[0], Ca[0]
+
+plt.plot(r, Ca)
+plt.ylim([0, CAs])
+plt.xlabel('Particle radius')
+plt.ylabel('$C_A$')
+
+rate_in_particle = np.trapz(k*Ca*4*np.pi*(r**2), r)
+ideal_rate = np.trapz(k*CAs*4*np.pi*(r**2), r)
+
+effectiveness = rate_in_particle / ideal_rate
+print 'Effectiveness factor = {0:1.2f}'.format(effectiveness)
+plt.title('Effectiveness factor = {0:1.2f}'.format(effectiveness))
+plt.show()
+#+END_SRC
+
+#+RESULTS:
+: Repeated convergence failures (perhaps bad Jacobian or tolerances).
+: Run with full_output = 1 to get quantitative information.
+: Effectiveness factor = 0.89
+
