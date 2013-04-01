@@ -134,15 +134,24 @@ At the end of the semester I will calculate what fraction of the possible points
 *** DONE [2013-02-20 Wed] Thermal desorption
     CLOSED: [2013-02-25 Mon 10:58]
 *** [2013-02-25 Mon] BET and TPD
-*** [2013-02-27 Wed] Tentative tour of Gellman surface science lab
-*** [2013-03-04 Mon] Literature Review presentations
-*** [2013-03-06 Wed] Literature Review presentations
-*** [2013-03-11 Mon] SPRING BREAK, NO CLASS
-*** [2013-03-13 Wed] SPRING BREAK, NO CLASS
-*** [2013-03-18 Mon] Tentative tour of MSE microscopy lab
-*** [2013-03-20 Wed]
-*** [2013-03-25 Mon]
-*** [2013-03-27 Wed]
+*** DONE [2013-02-27 Wed] Tentative tour of Gellman surface science lab
+    CLOSED: [2013-03-25 Mon 19:56]
+*** DONE [2013-03-04 Mon] Literature Review presentations
+    CLOSED: [2013-03-25 Mon 19:56]
+*** DONE [2013-03-06 Wed] Literature Review presentations
+    CLOSED: [2013-03-25 Mon 19:56]
+*** DONE [2013-03-11 Mon] SPRING BREAK, NO CLASS
+    CLOSED: [2013-03-25 Mon 19:56]
+*** DONE [2013-03-13 Wed] SPRING BREAK, NO CLASS
+    CLOSED: [2013-03-25 Mon 19:56]
+*** DONE [2013-03-18 Mon] 
+    CLOSED: [2013-03-25 Mon 19:56]
+*** DONE [2013-03-20 Wed]
+    CLOSED: [2013-03-25 Mon 19:57]
+*** DONE [2013-03-25 Mon]
+    CLOSED: [2013-03-25 Mon 19:57]
+*** DONE [2013-03-27 Wed]
+    CLOSED: [2013-04-01 Mon 09:54]
 *** [2013-04-01 Mon]
 *** [2013-04-03 Wed]
 *** [2013-04-08 Mon]
